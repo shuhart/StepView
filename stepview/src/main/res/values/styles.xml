@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="StepView">
+        <item name="selectedCircleColor">#ffffff</item>
+        <item name="selectedCircleRadius">14dp</item>
+        <item name="selectedTextColor">#ffffff</item>
+        <item name="selectedStepNumberColor">#25448a</item>
+        <item name="stepNumberTextSize">12sp</item>
+        <item name="doneStepMarkColor">#25448a</item>
+        <item name="doneCircleColor">#ffffff</item>
+        <item name="doneCircleRadius">14dp</item>
+        <item name="doneTextColor">#40ffffff</item>
+        <item name="nextTextColor">#40ffffff</item>
+        <item name="nextStepLineColor">#26ffffff</item>
+        <item name="doneStepLineColor">#ffffff</item>
+        <item name="stepPadding">12dp</item>
+        <item name="textPadding">12dp</item>
+        <item name="stepLineWidth">0.5dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

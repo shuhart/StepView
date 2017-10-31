@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.shuhart.stepview.MainActivity">
+    android:background="#25448a"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.shuhart.stepview.StepView
+        android:id="@+id/step_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:padding="16dp"/>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/next"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_next" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_back" />
+
+</LinearLayout>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">StepView</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_back">Back</string>
 </resources>

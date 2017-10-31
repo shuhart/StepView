@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StepView">
+        <attr name="selectedCircleColor" format="color" />
+        <attr name="selectedCircleRadius" format="dimension" />
+        <attr name="selectedTextColor" format="color" />
+        <attr name="selectedStepNumberColor" format="color" />
+        <attr name="stepNumberTextSize" format="dimension" />
+        <attr name="doneStepMarkColor" format="color" />
+        <attr name="doneCircleColor" format="color" />
+        <attr name="doneCircleRadius" format="dimension" />
+        <attr name="doneTextColor" format="color" />
+        <attr name="nextTextColor" format="color" />
+        <attr name="nextStepLineColor" format="color" />
+        <attr name="doneStepLineColor" format="color" />
+        <attr name="stepPadding" format="dimension" />
+        <attr name="textPadding" format="dimension" />
+        <attr name="stepLineWidth" format="dimension" />
+        <attr name="android:textSize" />
+        <attr name="android:background" />
+        <attr name="stepViewStyle" format="reference" />
+    </declare-styleable>
+</resources>
