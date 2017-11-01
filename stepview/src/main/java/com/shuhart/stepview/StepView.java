@@ -142,9 +142,11 @@ public class StepView extends View {
         if (step > currentStep) {
             i = step - 1;
             animator = ValueAnimator.ofInt(startLinesX[i], endLinesX[i]);
-        } else {
+        } else if (step < currentStep){
             i = step;
             animator = ValueAnimator.ofInt(endLinesX[i], startLinesX[i]);
+        } else {
+            return;
         }
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -284,6 +286,7 @@ public class StepView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         final int stepSize = steps.size();
+
         if (stepSize == 0) {
             return;
         }
@@ -291,6 +294,7 @@ public class StepView extends View {
         for (int i = 0; i < stepSize; i++) {
             drawStep(canvas, i, circlesX[i], circlesY);
         }
+
         for (int i = 0; i < startLinesX.length; i++) {
             if (state == ANIMATE_STEP_TRANSITION && i == nextAnimatedStep - 1 && nextAnimatedStep > currentStep) {
                 drawLine(canvas, startLinesX[i], animatedX, circlesY, true);
@@ -329,7 +333,13 @@ public class StepView extends View {
 
             drawCheckMark(canvas, circleCenterX, circleCenterY);
 
-            paint.setColor(doneTextColor);
+            if (state == ANIMATE_STEP_TRANSITION && step == nextAnimatedStep && nextAnimatedStep < currentStep) {
+                paint.setColor(doneTextColor);
+                int alpha = (int) Math.max(Color.alpha(doneTextColor), (1 - offset) * 255);
+                paint.setAlpha(alpha);
+            } else {
+                paint.setColor(doneTextColor);
+            }
             paint.setTextSize(textSize);
             drawText(canvas, text, circleCenterX, textY, paint);
         } else {
