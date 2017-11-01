@@ -23,7 +23,7 @@ Example:
 	app:selectedTextColor="@color/colorAccent"
 	app:stepLineWidth="1dp"
 	app:stepPadding="4dp"
-  app:nextTextColor="@color/colorAccent"
+        app:nextTextColor="@color/colorAccent"
 	app:nextStepLineColor="@color/colorAccent"
 	app:doneCircleColor="@color/colorAccent"
 	app:doneStepLineColor="@color/colorAccent"
@@ -34,6 +34,3 @@ Example:
 	app:doneStepMarkColor="@color/colorPrimary"
 	app:stepNumberTextSize="12sp"/>
 ```
-## License
-
-[LICENSE]: /LICENSE
