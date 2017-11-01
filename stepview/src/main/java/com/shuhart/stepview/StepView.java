@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -18,12 +19,12 @@ import java.util.List;
 
 public class StepView extends View {
     private static final int ANIMATE_STEP_TRANSITION = 0;
-    private static final int ANIMATE_AFTER_TRANSITION = 1;
-    private static final int IDLE = 2;
+    private static final int IDLE = 1;
 
     private static final int START_STEP = 0;
     private final List<String> steps = new ArrayList<>();
     private int currentStep = START_STEP;
+    private int nextAnimatedStep;
     private int state = IDLE;
 
     private int selectedCircleColor;
@@ -117,10 +118,11 @@ public class StepView extends View {
     public void go(int step, boolean animate) {
         if (step >= START_STEP && step < steps.size()) {
             if (animate) {
-                if (step - currentStep > 1 || step < currentStep) {
+                if (Math.abs(step - currentStep) > 1) {
                     currentStep = step;
                     invalidate();
                 } else {
+                    nextAnimatedStep = step;
                     state = ANIMATE_STEP_TRANSITION;
                     setupAnimator(step);
                     invalidate();
@@ -136,19 +138,27 @@ public class StepView extends View {
         if (animator != null && animator.isRunning()) {
             animator.end();
         }
-        animator = ValueAnimator.ofInt(startLinesX[step - 1], endLinesX[step - 1]);
+        final int i;
+        if (step > currentStep) {
+            i = step - 1;
+            animator = ValueAnimator.ofInt(startLinesX[i], endLinesX[i]);
+        } else {
+            i = step;
+            animator = ValueAnimator.ofInt(endLinesX[i], startLinesX[i]);
+        }
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 animatedX = (int) valueAnimator.getAnimatedValue();
-                offset = (animatedX - startLinesX[step - 1]) * 1f / (endLinesX[step - 1] - startLinesX[step - 1]);
+                offset = Math.abs((animatedX - startLinesX[i]) * 1f) / (endLinesX[i] - startLinesX[i]);
+                Log.d("StepView", "animatedX = " + animatedX + ", offset = " + offset);
                 invalidate();
             }
         });
         animator.addListener(new AnimatorListener() {
             @Override
             public void onAnimationEnd(Animator animator) {
-                state = ANIMATE_AFTER_TRANSITION;
+                state = IDLE;
                 currentStep = step;
                 invalidate();
             }
@@ -281,14 +291,17 @@ public class StepView extends View {
         for (int i = 0; i < stepSize; i++) {
             drawStep(canvas, i, circlesX[i], circlesY);
         }
-        for (int i = 1; i < stepSize; i++) {
-            if (state == ANIMATE_STEP_TRANSITION && i == currentStep + 1) {
-                drawLine(canvas, startLinesX[i - 1], animatedX, circlesY, true);
-                drawLine(canvas, animatedX, endLinesX[i - 1], circlesY, false);
-            } else if (i <= currentStep) {
-                drawLine(canvas, startLinesX[i - 1], endLinesX[i - 1], circlesY, true);
+        for (int i = 0; i < startLinesX.length; i++) {
+            if (state == ANIMATE_STEP_TRANSITION && i == nextAnimatedStep - 1 && nextAnimatedStep > currentStep) {
+                drawLine(canvas, startLinesX[i], animatedX, circlesY, true);
+                drawLine(canvas, animatedX, endLinesX[i], circlesY, false);
+            } else if (state == ANIMATE_STEP_TRANSITION && i == nextAnimatedStep && nextAnimatedStep < currentStep){
+                drawLine(canvas, startLinesX[i], animatedX, circlesY, true);
+                drawLine(canvas, animatedX, endLinesX[i], circlesY, false);
+            } else if (i < currentStep) {
+                drawLine(canvas, startLinesX[i], endLinesX[i], circlesY, true);
             } else {
-                drawLine(canvas, startLinesX[i - 1], endLinesX[i - 1], circlesY, false);
+                drawLine(canvas, startLinesX[i], endLinesX[i], circlesY, false);
             }
         }
     }
@@ -320,7 +333,7 @@ public class StepView extends View {
             paint.setTextSize(textSize);
             drawText(canvas, text, circleCenterX, textY, paint);
         } else {
-            if (state == ANIMATE_STEP_TRANSITION && step == currentStep + 1) {
+            if (state == ANIMATE_STEP_TRANSITION && step == nextAnimatedStep && nextAnimatedStep > currentStep) {
                 paint.setColor(nextTextColor);
                 int alpha = (int) Math.max(Color.alpha(nextTextColor), offset * 255);
                 paint.setAlpha(alpha);

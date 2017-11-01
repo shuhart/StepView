@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stepView.go(stepView.getCurrentStep() - 1, false);
+                stepView.go(stepView.getCurrentStep() - 1, true);
             }
         });
     }
