@@ -3,6 +3,8 @@ StepView
 
 A simple animated step view for Android. Backward and forward animation is supported.
 
+<img src="/images/sample.gif" alt="Sample" width="300px" />
+
 Usage
 -----
 
