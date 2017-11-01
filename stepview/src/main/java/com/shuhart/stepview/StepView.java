@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -225,7 +225,7 @@ public class StepView extends View {
 
             paint.setColor(selectedStepNumberColor);
             paint.setTextSize(stepNumberTextSize);
-            canvas.drawText(number, circleCenterX, circleCenterY + halfFontHeightOffset, paint);
+            canvas.drawText(number, circleCenterX, getStepNumberY(circleCenterY), paint);
 
             paint.setColor(selectedTextColor);
             paint.setTextSize(textSize);
@@ -234,9 +234,7 @@ public class StepView extends View {
             paint.setColor(doneCircleColor);
             canvas.drawCircle(circleCenterX, circleCenterY, doneCircleRadius, paint);
 
-            paint.setColor(doneStepMarkColor);
-            paint.setTextSize(stepNumberTextSize);
-            canvas.drawText(number, circleCenterX, circleCenterY + halfFontHeightOffset, paint);
+            drawCheckMark(canvas, circleCenterX, circleCenterY);
 
             paint.setColor(doneTextColor);
             paint.setTextSize(textSize);
@@ -251,6 +249,11 @@ public class StepView extends View {
         }
     }
 
+    private float getStepNumberY(int circleCenterY) {
+        int fontSize = textHeight();
+        return circleCenterY + fontSize / 2 - paint.descent();
+    }
+
     private void drawText(Canvas canvas, String text, int x, int y, Paint paint) {
         String[] split = text.split("\\n");
         if (split.length == 1) {
@@ -260,6 +263,27 @@ public class StepView extends View {
                 canvas.drawText(split[i], x, y + i * textHeight(), paint);
             }
         }
+    }
+
+    private void drawCheckMark(Canvas canvas, int circleCenterX, int circleCenterY) {
+        paint.setColor(doneStepMarkColor);
+        float width = stepNumberTextSize * 0.1f;
+        paint.setStrokeWidth(width);
+        Rect bounds = new Rect(
+                (int) (circleCenterX - width * 4.5),
+                (int) (circleCenterY - width * 3.5),
+                (int) (circleCenterX + width * 4.5),
+                (int) (circleCenterY + width * 3.5));
+        canvas.drawLine(
+                bounds.left + 0.5f * width,
+                bounds.bottom - 3.25f * width,
+                bounds.left + 3.25f * width,
+                bounds.bottom - 0.75f * width, paint);
+        canvas.drawLine(
+                bounds.left + 2.75f * width,
+                bounds.bottom - 0.75f * width,
+                bounds.right - 0.375f * width,
+                bounds.top + 0.75f * width, paint);
     }
 
     private void drawLine(Canvas canvas, int step, int startX, int endX, int centerY) {
