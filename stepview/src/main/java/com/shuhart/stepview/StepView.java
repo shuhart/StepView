@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ public class StepView extends View {
     private int selectedStepNumberColor;
     private float stepNumberTextSize;
     private int doneStepMarkColor;
+    private int animationDuration;
 
     private Paint paint;
     private ValueAnimator animator;
@@ -90,7 +90,7 @@ public class StepView extends View {
         textPadding = ta.getDimensionPixelSize(R.styleable.StepView_textPadding, 0);
         stepNumberTextSize = ta.getDimension(R.styleable.StepView_stepNumberTextSize, 0);
         textSize = ta.getDimension(R.styleable.StepView_android_textSize, 0);
-
+        animationDuration = ta.getInteger(R.styleable.StepView_android_animationDuration, 0);
         Drawable background = ta.getDrawable(R.styleable.StepView_android_background);
         if (background != null) {
             setBackgroundDrawable(background);
@@ -153,7 +153,7 @@ public class StepView extends View {
                 invalidate();
             }
         });
-        animator.setDuration(200);
+        animator.setDuration(animationDuration);
         animator.start();
     }
 

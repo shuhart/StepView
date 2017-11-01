@@ -18,6 +18,7 @@
         <attr name="stepLineWidth" format="dimension" />
         <attr name="android:textSize" />
         <attr name="android:background" />
+        <attr name="android:animationDuration" />
         <attr name="stepViewStyle" format="reference" />
     </declare-styleable>
 </resources>

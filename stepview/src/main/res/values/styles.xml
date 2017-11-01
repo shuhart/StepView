@@ -17,6 +17,7 @@
         <item name="stepPadding">12dp</item>
         <item name="textPadding">12dp</item>
         <item name="stepLineWidth">0.5dp</item>
+        <item name="android:animationDuration">200</item>
         <item name="android:textSize">14sp</item>
     </style>
 </resources>
