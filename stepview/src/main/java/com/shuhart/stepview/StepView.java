@@ -1,5 +1,6 @@
 package com.shuhart.stepview;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -14,9 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StepView extends View {
+    private static final int ANIMATE_STEP_TRANSITION = 0;
+    private static final int ANIMATE_AFTER_TRANSITION = 1;
+    private static final int IDLE = 2;
+
     private static final int START_STEP = 0;
     private final List<String> steps = new ArrayList<>();
     private int currentStep = START_STEP;
+    private int state = IDLE;
 
     private int selectedCircleColor;
     private int selectedCircleRadius;
@@ -36,6 +42,14 @@ public class StepView extends View {
     private int doneStepMarkColor;
 
     private Paint paint;
+    private ValueAnimator animator;
+
+    private int[] circlesX;
+    private int stepNumbersY;
+    private int[] startLinesX;
+    private int[] endLinesX;
+    private int circlesY;
+    private int textY;
 
     public StepView(Context context) {
         this(context, null);
@@ -92,13 +106,28 @@ public class StepView extends View {
             this.steps.addAll(steps);
         }
         requestLayout();
-        go(START_STEP);
+        go(START_STEP, false);
     }
 
-    public void go(int step) {
+    public void go(int step, boolean animate) {
         if (step >= START_STEP && step < steps.size()) {
-            currentStep = step;
-            invalidate();
+            if (animate) {
+                if (step - currentStep > 1) {
+                    currentStep = step;
+                    invalidate();
+                } else {
+                    state = ANIMATE_STEP_TRANSITION;
+                    if (animator != null && animator.isRunning()) {
+                        animator.cancel();
+                    } else {
+                        animator = ValueAnimator.ofFloat(startLinesX[step], endLinesX[step]);
+                    }
+                    invalidate();
+                }
+            } else {
+                currentStep = step;
+                invalidate();
+            }
         }
     }
 
@@ -113,6 +142,7 @@ public class StepView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
+        measureAttributes();
     }
 
     private int measureWidth(int widthMeasureSpec) {
@@ -124,7 +154,7 @@ public class StepView extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
         if (heightMode == MeasureSpec.AT_MOST) {
-            final int fontHeight = textHeight();
+            final int fontHeight = fontHeight();
             height = getPaddingTop()
                     + getPaddingBottom()
                     + (Math.max(selectedCircleRadius, doneCircleRadius)) * 2
@@ -139,7 +169,7 @@ public class StepView extends View {
         return height;
     }
 
-    private int textHeight() {
+    private int fontHeight() {
         return (int) Math.ceil(paint.descent() - paint.ascent());
     }
 
@@ -158,29 +188,15 @@ public class StepView extends View {
         return max;
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        final int stepSize = steps.size();
-        if (stepSize == 0) {
-            return;
-        }
-
-        final float ascent = paint.ascent();
-        final float descent = paint.descent();
-        final int fontHeight = (int) Math.ceil(descent - ascent);
-        final int halfFontHeightOffset = -(int) (ascent + descent) / 2;
-        final int y = getPaddingTop() + selectedCircleRadius;
+    private void measureAttributes() {
+        int fontHeight = fontHeight();
         int[] stepsTextWidth = measureSteps();
-        int[] circlePositions = getCirclePositions(stepsTextWidth);
 
-        for (int i = 0; i < circlePositions.length; i++) {
-            drawStep(canvas, i, halfFontHeightOffset, fontHeight,
-                    circlePositions[i], y);
-        }
-        for (int i = 1; i < stepSize; i++) {
-            drawLine(canvas, i, circlePositions[i - 1] + stepPadding + selectedCircleRadius,
-                    circlePositions[i] - stepPadding - selectedCircleRadius, y);
-        }
+        circlesY = getPaddingTop() + selectedCircleRadius;
+        circlesX = getCirclePositions(stepsTextWidth);
+        stepNumbersY = (int) (circlesY + fontHeight / 2 - paint.descent());
+        textY = circlesY + selectedCircleRadius + textPadding + fontHeight / 2;
+        measureLines();
     }
 
     private int[] measureSteps() {
@@ -202,22 +218,45 @@ public class StepView extends View {
         if (result.length < 3) {
             return result;
         }
-        int spaceLeft = result[textWidth.length - 1] - result[0];
-        int margin = spaceLeft / (textWidth.length - 1);
+        float spaceLeft = result[textWidth.length - 1] - result[0];
+        int margin = (int) (spaceLeft / (textWidth.length - 1));
         for (int i = 1; i < textWidth.length - 1; i++) {
             result[i] = result[i - 1] + i * margin;
         }
         return result;
     }
 
-    private void drawStep(Canvas canvas, int step, int halfFontHeightOffset, int fontHeight,
-                          int circleCenterX, int circleCenterY) {
+    private void measureLines() {
+        startLinesX = new int[steps.size() - 1];
+        endLinesX = new int[steps.size() - 1];
+        int padding = stepPadding + selectedCircleRadius;
+
+        for (int i = 1; i < steps.size(); i++) {
+            startLinesX[i - 1] = circlesX[i - 1] + padding;
+            endLinesX[i - 1] = circlesX[i] - padding;
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        final int stepSize = steps.size();
+        if (stepSize == 0) {
+            return;
+        }
+
+        for (int i = 0; i < stepSize; i++) {
+            drawStep(canvas, i, circlesX[i], circlesY);
+        }
+        for (int i = 0; i < stepSize - 1; i++) {
+            drawLine(canvas, i, startLinesX[i], endLinesX[i], circlesY);
+        }
+    }
+
+    private void drawStep(Canvas canvas, int step, int circleCenterX, int circleCenterY) {
         final String text = steps.get(step);
         final boolean isSelected = step == currentStep;
         final boolean isDone = step < currentStep;
         final String number = String.valueOf(step + 1);
-
-        int textY = circleCenterY + selectedCircleRadius + textPadding + fontHeight / 2;
 
         if (isSelected) {
             paint.setColor(selectedCircleColor);
@@ -225,7 +264,7 @@ public class StepView extends View {
 
             paint.setColor(selectedStepNumberColor);
             paint.setTextSize(stepNumberTextSize);
-            canvas.drawText(number, circleCenterX, getStepNumberY(circleCenterY), paint);
+            canvas.drawText(number, circleCenterX, stepNumbersY, paint);
 
             paint.setColor(selectedTextColor);
             paint.setTextSize(textSize);
@@ -242,16 +281,11 @@ public class StepView extends View {
         } else {
             paint.setColor(nextTextColor);
             paint.setTextSize(stepNumberTextSize);
-            canvas.drawText(number, circleCenterX, circleCenterY + halfFontHeightOffset, paint);
+            canvas.drawText(number, circleCenterX, stepNumbersY, paint);
 
             paint.setTextSize(textSize);
             drawText(canvas, text, circleCenterX, textY, paint);
         }
-    }
-
-    private float getStepNumberY(int circleCenterY) {
-        int fontSize = textHeight();
-        return circleCenterY + fontSize / 2 - paint.descent();
     }
 
     private void drawText(Canvas canvas, String text, int x, int y, Paint paint) {
@@ -260,7 +294,7 @@ public class StepView extends View {
             canvas.drawText(text, x, y, paint);
         } else {
             for (int i = 0; i < split.length; i++) {
-                canvas.drawText(split[i], x, y + i * textHeight(), paint);
+                canvas.drawText(split[i], x, y + i * fontHeight(), paint);
             }
         }
     }

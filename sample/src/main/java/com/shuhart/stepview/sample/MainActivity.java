@@ -26,13 +26,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stepView.go(stepView.getCurrentStep() + 1);
+                stepView.go(stepView.getCurrentStep() + 1, false);
             }
         });
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stepView.go(stepView.getCurrentStep() - 1);
+                stepView.go(stepView.getCurrentStep() - 1, false);
             }
         });
     }
