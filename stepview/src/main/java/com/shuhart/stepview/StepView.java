@@ -259,7 +259,7 @@ public class StepView extends View {
         if (result.length == 1) {
             return result;
         }
-        result[textWidth.length - 1] = getWidth() - getPaddingRight() -
+        result[textWidth.length - 1] = getMeasuredWidth() - getPaddingRight() -
                 Math.max(textWidth[textWidth.length - 1] / 2, selectedCircleRadius);
         if (result.length < 3) {
             return result;
