@@ -267,7 +267,7 @@ public class StepView extends View {
         float spaceLeft = result[textWidth.length - 1] - result[0];
         int margin = (int) (spaceLeft / (textWidth.length - 1));
         for (int i = 1; i < textWidth.length - 1; i++) {
-            result[i] = result[i - 1] + i * margin;
+            result[i] = result[i - 1] + margin;
         }
         return result;
     }

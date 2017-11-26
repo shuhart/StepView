@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
             add("Beginning");
             add("Intermediate\npage");
             add("End");
+            add("Post step");
         }});
         findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
