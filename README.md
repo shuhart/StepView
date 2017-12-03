@@ -39,11 +39,11 @@ Example:
 Here the supported animations:
 
 Name| Preview
--------- | --- | ---
-`ANIMATION_LINE`| ![anim_none](/images/animation_line.gif)
-`ANIMATION_CIRCLE`| ![anim_color](/images/animation_circle.gif)
-`ANIMATION_ALL`| ![anim_scale](/images/animation_all.gif)
-`ANIMATION_NONE`| ![anim_slide](/images/animation_none.gif)
+-------- | ---
+`ANIMATION_LINE`| ![animation_line](/images/animation_line.gif)
+`ANIMATION_CIRCLE`| ![animation_circle](/images/animation_circle.gif)
+`ANIMATION_ALL`| ![animation_all](/images/animation_all.gif)
+`ANIMATION_NONE`| ![animation_none](/images/animation_none.gif)
 
 License
 =======
