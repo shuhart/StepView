@@ -1,11 +1,6 @@
-package com.shuhart.stepview;
+package com.shuhart.stepview.animation;
 
 import android.animation.Animator;
-
-/**
- * Created by Bogdan Kornev
- * on 11/1/2017, 4:50 PM.
- */
 
 public class AnimatorListener implements Animator.AnimatorListener {
     @Override

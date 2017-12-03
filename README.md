@@ -1,15 +1,13 @@
 StepView
 ======================
 
-A simple animated step view for Android. Backward and forward animation is supported.
-
-<img src="/images/sample.gif" alt="Sample" width="300px" />
+A simple animated step view for Android. Backward and forward animations is supported.
 
 Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `compile 'com.shuhart.stepview:stepview:1.0.1'` to your dependencies.
+2. Add `compile 'com.shuhart.stepview:stepview:1.1.0'` to your dependencies.
 2. Add `StepView` into your layouts or view hierarchy.
 3. Look into the sample for additional details on how to use and configure the library.
 
@@ -34,8 +32,18 @@ Example:
 	app:selectedStepNumberColor="@color/colorPrimary"
 	app:stepViewStyle="@style/StepView"
 	app:doneStepMarkColor="@color/colorPrimary"
-	app:stepNumberTextSize="12sp"/>
+	app:stepNumberTextSize="12sp"
+	app:animationType="Line"/>
 ```
+
+Here the supported animations:
+
+Name| Preview
+-------- | --- | ---
+`ANIMATION_LINE`| ![anim_none](/images/animation_line.gif)
+`ANIMATION_CIRCLE`| ![anim_color](/images/animation_circle.gif)
+`ANIMATION_ALL`| ![anim_scale](/images/animation_all.gif)
+`ANIMATION_NONE`| ![anim_slide](/images/animation_none.gif)
 
 License
 =======

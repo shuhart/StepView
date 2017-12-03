@@ -2,22 +2,23 @@
 <resources>
 
     <style name="StepView">
-        <item name="selectedCircleColor">#ffffff</item>
+        <item name="selectedCircleColor">@color/stepview_circle_selected</item>
         <item name="selectedCircleRadius">14dp</item>
-        <item name="selectedTextColor">#ffffff</item>
-        <item name="selectedStepNumberColor">#25448a</item>
+        <item name="selectedTextColor">@color/stepview_text_selected</item>
+        <item name="selectedStepNumberColor">@color/stepview_selected_number</item>
         <item name="stepNumberTextSize">12sp</item>
-        <item name="doneStepMarkColor">#25448a</item>
-        <item name="doneCircleColor">#ffffff</item>
+        <item name="doneStepMarkColor">@color/stepview_mark</item>
+        <item name="doneCircleColor">@color/stepview_circle_done</item>
         <item name="doneCircleRadius">14dp</item>
-        <item name="doneTextColor">#40ffffff</item>
-        <item name="nextTextColor">#40ffffff</item>
-        <item name="nextStepLineColor">#26ffffff</item>
-        <item name="doneStepLineColor">#ffffff</item>
+        <item name="doneTextColor">@color/stepview_text_done</item>
+        <item name="nextTextColor">@color/stepview_text_next</item>
+        <item name="nextStepLineColor">@color/stepview_line_next</item>
+        <item name="doneStepLineColor">@color/stepview_line_done</item>
         <item name="stepPadding">12dp</item>
         <item name="textPadding">12dp</item>
         <item name="stepLineWidth">0.5dp</item>
         <item name="android:animationDuration">200</item>
         <item name="android:textSize">14sp</item>
+        <item name="animationType">Line</item>
     </style>
 </resources>

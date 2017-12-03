@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#25448a"
     android:gravity="center"
     android:orientation="vertical"
@@ -12,7 +13,10 @@
         android:id="@+id/step_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="16dp"
+        app:stepPadding="12dp"
+        app:doneStepLineColor="@color/stepview_line_next"
+        app:animationType="Circle"/>
 
     <Button
         android:id="@+id/next"
