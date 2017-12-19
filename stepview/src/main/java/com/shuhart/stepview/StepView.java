@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.shuhart.stepview.animation.AnimatorListener;
@@ -142,6 +143,7 @@ public class StepView extends View {
         if (step >= START_STEP && step < steps.size()) {
             if (animate && animationType != ANIMATION_NONE) {
                 if (Math.abs(step - currentStep) > 1) {
+                    endAnimation();
                     currentStep = step;
                     invalidate();
                 } else {
@@ -157,10 +159,14 @@ public class StepView extends View {
         }
     }
 
-    private void animate(final int step) {
+    private void endAnimation() {
         if (animator != null && animator.isRunning()) {
             animator.end();
         }
+    }
+
+    private void animate(final int step) {
+        endAnimation();
         animator = getAnimator(step);
         if (animator == null) {
             return;

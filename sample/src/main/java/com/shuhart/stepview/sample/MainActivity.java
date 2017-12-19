@@ -11,6 +11,7 @@ import com.shuhart.stepview.StepView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private int currentStep = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -27,13 +28,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stepView.go(stepView.getCurrentStep() + 1, true);
+                currentStep++;
+                stepView.go(currentStep, true);
             }
         });
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stepView.go(stepView.getCurrentStep() - 1, true);
+                currentStep--;
+                stepView.go(currentStep, true);
             }
         });
     }
