@@ -25,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (currentStep < stepView.getStepCount() - 1) {
                     currentStep++;
+                    stepView.go(currentStep, true);
+                } else {
+                    stepView.done(true);
                 }
-                stepView.go(currentStep, true);
             }
         });
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 if (currentStep > 0) {
                     currentStep--;
                 }
+                stepView.done(false);
                 stepView.go(currentStep, true);
             }
         });

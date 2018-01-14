@@ -100,6 +100,7 @@ public class StepView extends View {
     private int circlesY;
     private int textY;
     private float animatedFraction;
+    private boolean done;
 
     public StepView(Context context) {
         this(context, null);
@@ -212,6 +213,11 @@ public class StepView extends View {
                 invalidate();
             }
         }
+    }
+
+    public void done(boolean isDone) {
+        done = isDone;
+        invalidate();
     }
 
     private void endAnimation() {
@@ -455,10 +461,10 @@ public class StepView extends View {
     private void drawStep(Canvas canvas, int step, int circleCenterX, int circleCenterY) {
         final String text = displayMode == DISPLAY_MODE_WITH_TEXT ? steps.get(step) : "";
         final boolean isSelected = step == currentStep;
-        final boolean isDone = step < currentStep;
+        final boolean isDone = done ? step <= currentStep : step < currentStep;
         final String number = String.valueOf(step + 1);
 
-        if (isSelected) {
+        if (isSelected && !isDone) {
             paint.setColor(selectedCircleColor);
             int radius;
             if (state == ANIMATE_STEP_TRANSITION && (animationType == ANIMATION_CIRCLE || animationType == ANIMATION_ALL)
