@@ -98,6 +98,17 @@ or instantiate and setup it in runtime with handy state builder:
             .commit();
 ```
 
+If you want to mark last step with a done mark:
+
+```java
+	stepView.done(true);
+```
+If you want to allow going back after that, you should unmark the done state:
+
+```java
+	stepView.done(false)
+```
+
 License
 =======
 
