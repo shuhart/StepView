@@ -11,7 +11,43 @@ Usage
 2. Add `StepView` into your layouts or view hierarchy.
 3. Look into the sample for additional details on how to use and configure the library.
 
-Example:
+Supported animations:
+
+Name| Preview
+-------- | ---
+`ANIMATION_LINE`| ![animation_line](/images/animation_line.gif)
+`ANIMATION_CIRCLE`| ![animation_circle](/images/animation_circle.gif)
+`ANIMATION_ALL`| ![animation_all](/images/animation_all.gif)
+`ANIMATION_NONE`| ![animation_none](/images/animation_none.gif)
+
+In ANIMATION_CIRCLE and ANIMATION_NONE examples the line color remains the same. You can achieve this by specifying:
+``` app:doneStepLineColor="@color/stepview_line_next" ```
+
+Usage:
+
+Specify steps with xml attribute:
+```xml
+	app:steps="@array/steps"
+```
+
+```java
+	stepView.setSteps(List<String> steps);
+```
+
+Or Specify numbers of steps so that only circles with step number are shown:
+
+```xml
+	app:stepsNumber="4"
+```
+
+```java
+	stepView.setStepsNumber(4);
+```
+
+<img src="/images/no_text.png"/>
+
+
+Styling:
 
 ```xml
 <com.shuhart.stepview.StepView
@@ -23,7 +59,7 @@ Example:
 	app:selectedTextColor="@color/colorAccent"
 	app:stepLineWidth="1dp"
 	app:stepPadding="4dp"
-        app:nextTextColor="@color/colorAccent"
+    app:nextTextColor="@color/colorAccent"
 	app:nextStepLineColor="@color/colorAccent"
 	app:doneCircleColor="@color/colorAccent"
 	app:doneStepLineColor="@color/colorAccent"
@@ -36,17 +72,32 @@ Example:
 	app:animationType="Line"/>
 ```
 
-Here the supported animations:
+or instantiate and setup it in runtime with handy state builder:
 
-Name| Preview
--------- | ---
-`ANIMATION_LINE`| ![animation_line](/images/animation_line.gif)
-`ANIMATION_CIRCLE`| ![animation_circle](/images/animation_circle.gif)
-`ANIMATION_ALL`| ![animation_all](/images/animation_all.gif)
-`ANIMATION_NONE`| ![animation_none](/images/animation_none.gif)
-
-In ANIMATION_CIRCLE and ANIMATION_NONE examples the line color remains the same. You can achieve this by specifying:
-``` app:doneStepLineColor="@color/stepview_line_next" ```
+```java
+    stepView.getState()
+            .selectedTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+            .animationType(StepView.ANIMATION_CIRCLE)
+            .selectedCircleColor(ContextCompat.getColor(this, R.color.colorAccent))
+            .selectedCircleRadius(getResources().getDimensionPixelSize(R.dimen.dp14))
+            .selectedStepNumberColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            // You should specify only stepsNumber or steps array of strings
+            // In case you specify both steps array are chosen.
+            .steps(new ArrayList<String>() {{
+                add("First step");
+                add("Second step");
+                add("Third step");
+            }})
+            // You should specify only steps number or steps array of strings
+            // In case you specify both steps array are chosen.
+            .stepsNumber(4)
+            .animationDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+            .stepLineWidth(getResources().getDimensionPixelSize(R.dimen.dp1))
+            .textSize(getResources().getDimensionPixelSize(R.dimen.sp14))
+            .stepNumberTextSize(getResources().getDimensionPixelSize(R.dimen.sp16))
+            // other state methods are equal to the corresponding xml attributes
+            .commit();
+```
 
 License
 =======

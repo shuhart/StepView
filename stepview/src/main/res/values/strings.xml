@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">stepview</string>
+    <string-array name="steps">
+        <item>Beginning</item>
+        <item>Intermediate\npage</item>
+        <item>End</item>
+        <item>Post step</item>
+    </string-array>
 </resources>

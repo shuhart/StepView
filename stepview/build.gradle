@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/shuhart/StepView'
     gitUrl = 'https://github.com/shuhart/StepView.git'
 
-    libraryVersion = '1.1.1'
+    libraryVersion = '1.2.0'
 
     developerId = 'shuhart'
     developerName = 'Redrick Shuhart'

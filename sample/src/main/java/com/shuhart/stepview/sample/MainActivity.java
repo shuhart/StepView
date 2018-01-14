@@ -2,6 +2,7 @@ package com.shuhart.stepview.sample;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -19,23 +20,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final StepView stepView = findViewById(R.id.step_view);
-        stepView.setSteps(new ArrayList<String>() {{
-            add("Beginning");
-            add("Intermediate\npage");
-            add("End");
-            add("Post step");
-        }});
         findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentStep++;
+                if (currentStep < stepView.getStepCount() - 1) {
+                    currentStep++;
+                }
                 stepView.go(currentStep, true);
             }
         });
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentStep--;
+                if (currentStep > 0) {
+                    currentStep--;
+                }
                 stepView.go(currentStep, true);
             }
         });

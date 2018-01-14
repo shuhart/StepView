@@ -9,10 +9,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.Dimension;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.shuhart.stepview.animation.AnimatorListener;
@@ -20,7 +21,6 @@ import com.shuhart.stepview.animation.AnimatorListener;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StepView extends View {
@@ -29,37 +29,64 @@ public class StepView extends View {
     public static final int ANIMATION_ALL = 2;
     public static final int ANIMATION_NONE = 3;
 
+    public static final int DISPLAY_MODE_WITH_TEXT = 0;
+    public static final int DISPLAY_MODE_NO_TEXT = 1;
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({ANIMATION_LINE, ANIMATION_CIRCLE, ANIMATION_ALL, ANIMATION_NONE})
     public @interface AnimationType {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({DISPLAY_MODE_WITH_TEXT, DISPLAY_MODE_NO_TEXT})
+    public @interface DisplayMode {
     }
 
     private static final int ANIMATE_STEP_TRANSITION = 0;
     private static final int IDLE = 1;
 
     private static final int START_STEP = 0;
-    private @AnimationType
-    int animationType;
-    private final List<String> steps = new ArrayList<>();
+    @DisplayMode
+    private int displayMode = DISPLAY_MODE_WITH_TEXT;
+    private List<String> steps = new ArrayList<>();
+    // for display mode DISPLAY_MODE_NO_TEXT
+    private int stepsNumber = 0;
     private int currentStep = START_STEP;
     private int nextAnimatedStep;
     private int state = IDLE;
 
+    @AnimationType
+    private int animationType;
+    @ColorInt
     private int selectedCircleColor;
+    @Dimension
     private int selectedCircleRadius;
+    @ColorInt
     private int selectedTextColor;
+    @ColorInt
     private int doneCircleColor;
+    @Dimension
     private int doneCircleRadius;
+    @ColorInt
     private int doneTextColor;
+    @ColorInt
     private int nextTextColor;
+    @Dimension
     private int stepPadding;
+    @ColorInt
     private int nextStepLineColor;
+    @ColorInt
     private int doneStepLineColor;
+    @Dimension
     private int stepLineWidth;
+    @Dimension(unit = Dimension.SP)
     private float textSize;
+    @Dimension
     private int textPadding;
     private int selectedStepNumberColor;
+    @Dimension(unit = Dimension.SP)
     private float stepNumberTextSize;
+    @ColorInt
     private int doneStepMarkColor;
     private int animationDuration;
 
@@ -72,7 +99,6 @@ public class StepView extends View {
     private int[] endLinesX;
     private int circlesY;
     private int textY;
-    //    private int animatedX;
     private float animatedFraction;
 
     public StepView(Context context) {
@@ -111,6 +137,16 @@ public class StepView extends View {
         textSize = ta.getDimension(R.styleable.StepView_android_textSize, 0);
         animationDuration = ta.getInteger(R.styleable.StepView_android_animationDuration, 0);
         animationType = ta.getInteger(R.styleable.StepView_animationType, 0);
+        stepsNumber = ta.getInteger(R.styleable.StepView_stepsNumber, 0);
+        CharSequence[] descriptions = ta.getTextArray(R.styleable.StepView_steps);
+        if (descriptions != null) {
+            for (CharSequence item : descriptions) {
+                steps.add(item.toString());
+            }
+            displayMode = DISPLAY_MODE_WITH_TEXT;
+        } else {
+            displayMode = DISPLAY_MODE_NO_TEXT;
+        }
         Drawable background = ta.getDrawable(R.styleable.StepView_android_background);
         if (background != null) {
             setBackgroundDrawable(background);
@@ -120,17 +156,24 @@ public class StepView extends View {
 
     private void drawEditMode() {
         if (isInEditMode()) {
-            String[] steps = {"Step 1", "Step 2", "Step 3"};
-            setSteps(Arrays.asList(steps));
+            if (displayMode == DISPLAY_MODE_WITH_TEXT) {
+                if (steps.isEmpty()) {
+                    steps.add("Step 1");
+                    steps.add("Step 2");
+                    steps.add("Step 3");
+                }
+                setSteps(steps);
+            } else {
+                if (stepsNumber == 0) {
+                    stepsNumber = 4;
+                }
+                setStepsNumber(stepsNumber);
+            }
         }
     }
 
-    public void setAnimationType(@AnimationType int animationType) {
-        this.animationType = animationType;
-        invalidate();
-    }
-
     public void setSteps(List<String> steps) {
+        displayMode = DISPLAY_MODE_WITH_TEXT;
         this.steps.clear();
         if (steps != null) {
             this.steps.addAll(steps);
@@ -139,8 +182,20 @@ public class StepView extends View {
         go(START_STEP, false);
     }
 
+    public void setStepsNumber(int number) {
+        steps.clear();
+        displayMode = DISPLAY_MODE_NO_TEXT;
+        stepsNumber = number;
+        requestLayout();
+        go(START_STEP, false);
+    }
+
+    public State getState() {
+        return new State();
+    }
+
     public void go(int step, boolean animate) {
-        if (step >= START_STEP && step < steps.size()) {
+        if (step >= START_STEP && step < getStepCount()) {
             if (animate && animationType != ANIMATION_NONE) {
                 if (Math.abs(step - currentStep) > 1) {
                     endAnimation();
@@ -231,7 +286,7 @@ public class StepView extends View {
     }
 
     public int getStepCount() {
-        return steps.size();
+        return displayMode == DISPLAY_MODE_WITH_TEXT ? steps.size() : stepsNumber;
     }
 
     @Override
@@ -249,15 +304,12 @@ public class StepView extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
         if (heightMode == MeasureSpec.AT_MOST) {
-            final int fontHeight = fontHeight();
             height = getPaddingTop()
                     + getPaddingBottom()
                     + (Math.max(selectedCircleRadius, doneCircleRadius)) * 2
-                    + textPadding;
-            if (steps.isEmpty()) {
-                height += fontHeight;
-            } else {
-                height += measureStepsHeight(fontHeight);
+                    + (displayMode == DISPLAY_MODE_WITH_TEXT ? textPadding : 0);
+            if (!steps.isEmpty()) {
+                height += measureStepsHeight();
             }
         }
 
@@ -268,8 +320,9 @@ public class StepView extends View {
         return (int) Math.ceil(paint.descent() - paint.ascent());
     }
 
-    private int measureStepsHeight(int fontHeight) {
+    private int measureStepsHeight() {
         paint.setTextSize(textSize);
+        int fontHeight = fontHeight();
         int max = 0;
         for (int i = 0; i < steps.size(); i++) {
             String text = steps.get(i);
@@ -284,14 +337,29 @@ public class StepView extends View {
     }
 
     private void measureAttributes() {
-        int fontHeight = fontHeight();
-        int[] stepsTextWidth = measureSteps();
-
-        circlesY = getPaddingTop() + selectedCircleRadius;
-        circlesX = getCirclePositions(stepsTextWidth);
-        stepNumbersY = (int) (circlesY + fontHeight / 2 - paint.descent());
-        textY = circlesY + selectedCircleRadius + textPadding + fontHeight / 2;
+        circlesY = (getMeasuredHeight() - getPaddingTop() - getPaddingBottom()) / 2;
+        if (displayMode == DISPLAY_MODE_NO_TEXT) {
+            circlesY += getPaddingTop();
+        }
+        circlesX = getCirclePositions();
+        if (displayMode == DISPLAY_MODE_NO_TEXT) {
+            paint.setTextSize(stepNumberTextSize);
+            stepNumbersY = (int) (circlesY + fontHeight() / 2 - paint.descent());
+        } else {
+            paint.setTextSize(stepNumberTextSize);
+            stepNumbersY = (int) (circlesY + fontHeight() / 2 - paint.descent());
+            paint.setTextSize(textSize);
+            textY = circlesY + selectedCircleRadius + textPadding + fontHeight() / 2;
+        }
         measureLines();
+    }
+
+    private int[] getCirclePositions() {
+        if (displayMode == DISPLAY_MODE_WITH_TEXT) {
+            return getCirclePositionsWithText(measureSteps());
+        } else {
+            return getCirclePositionsWithoutText();
+        }
     }
 
     private int[] measureSteps() {
@@ -302,8 +370,11 @@ public class StepView extends View {
         return result;
     }
 
-    private int[] getCirclePositions(int[] textWidth) {
+    private int[] getCirclePositionsWithText(int[] textWidth) {
         int[] result = new int[textWidth.length];
+        if (result.length == 0) {
+            return result;
+        }
         result[0] = getPaddingLeft() + Math.max(textWidth[0] / 2, selectedCircleRadius);
         if (result.length == 1) {
             return result;
@@ -321,12 +392,30 @@ public class StepView extends View {
         return result;
     }
 
+    private int[] getCirclePositionsWithoutText() {
+        int[] result = new int[getStepCount()];
+        if (result.length == 0) {
+            return result;
+        }
+        result[0] = getPaddingLeft() + selectedCircleRadius;
+        if (result.length == 1) {
+            return result;
+        }
+        result[result.length - 1] = getMeasuredWidth() - getPaddingRight();
+        float spaceLeft = result[result.length - 1] - result[0];
+        int margin = (int) (spaceLeft / (result.length - 1));
+        for (int i = 1; i < result.length - 1; i++) {
+            result[i] = result[i - 1] + margin;
+        }
+        return result;
+    }
+
     private void measureLines() {
-        startLinesX = new int[steps.size() - 1];
-        endLinesX = new int[steps.size() - 1];
+        startLinesX = new int[getStepCount() - 1];
+        endLinesX = new int[getStepCount() - 1];
         int padding = stepPadding + selectedCircleRadius;
 
-        for (int i = 1; i < steps.size(); i++) {
+        for (int i = 1; i < getStepCount(); i++) {
             startLinesX[i - 1] = circlesX[i - 1] + padding;
             endLinesX[i - 1] = circlesX[i] - padding;
         }
@@ -334,7 +423,7 @@ public class StepView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final int stepSize = steps.size();
+        final int stepSize = getStepCount();
 
         if (stepSize == 0) {
             return;
@@ -364,7 +453,7 @@ public class StepView extends View {
     }
 
     private void drawStep(Canvas canvas, int step, int circleCenterX, int circleCenterY) {
-        final String text = steps.get(step);
+        final String text = displayMode == DISPLAY_MODE_WITH_TEXT ? steps.get(step) : "";
         final boolean isSelected = step == currentStep;
         final boolean isDone = step < currentStep;
         final String number = String.valueOf(step + 1);
@@ -410,8 +499,6 @@ public class StepView extends View {
                     canvas.drawCircle(circleCenterX, circleCenterY, animatedRadius, paint);
                 }
                 if (animationType != ANIMATION_NONE) {
-                    paint.setTextSize(stepNumberTextSize);
-
                     if (animationType == ANIMATION_CIRCLE || animationType == ANIMATION_ALL) {
                         paint.setColor(selectedStepNumberColor);
                         int alpha = (int) (animatedFraction * 255);
@@ -419,10 +506,12 @@ public class StepView extends View {
                         paint.setTextSize(stepNumberTextSize * animatedFraction);
                         canvas.drawText(number, circleCenterX, stepNumbersY, paint);
                     } else {
+                        paint.setTextSize(stepNumberTextSize);
                         paint.setColor(nextTextColor);
                         canvas.drawText(number, circleCenterX, stepNumbersY, paint);
                     }
                 } else {
+                    paint.setTextSize(stepNumberTextSize);
                     paint.setColor(nextTextColor);
                     canvas.drawText(number, circleCenterX, stepNumbersY, paint);
                 }
@@ -445,6 +534,9 @@ public class StepView extends View {
     }
 
     private void drawText(Canvas canvas, String text, int x, int y, Paint paint) {
+        if (text.isEmpty()) {
+            return;
+        }
         String[] split = text.split("\\n");
         if (split.length == 1) {
             canvas.drawText(text, x, y, paint);
@@ -485,6 +577,174 @@ public class StepView extends View {
             paint.setColor(nextStepLineColor);
             paint.setStrokeWidth(stepLineWidth);
             canvas.drawLine(startX, centerY, endX, centerY, paint);
+        }
+    }
+
+    public class State {
+        private List<String> steps;
+        private int stepsNumber;
+        @AnimationType
+        private int animationType = StepView.this.animationType;
+        @ColorInt
+        private int selectedCircleColor = StepView.this.selectedCircleColor;
+        @Dimension
+        private int selectedCircleRadius = StepView.this.selectedCircleRadius;
+        @ColorInt
+        private int selectedTextColor = StepView.this.selectedTextColor;
+        @ColorInt
+        private int doneCircleColor = StepView.this.doneCircleColor;
+        @Dimension
+        private int doneCircleRadius = StepView.this.doneCircleRadius;
+        @ColorInt
+        private int doneTextColor = StepView.this.doneTextColor;
+        @ColorInt
+        private int nextTextColor = StepView.this.nextTextColor;
+        @Dimension
+        private int stepPadding = StepView.this.stepPadding;
+        @ColorInt
+        private int nextStepLineColor = StepView.this.nextStepLineColor;
+        @ColorInt
+        private int doneStepLineColor = StepView.this.doneStepLineColor;
+        @Dimension
+        private int stepLineWidth = StepView.this.stepLineWidth;
+        @Dimension(unit = Dimension.SP)
+        private float textSize = StepView.this.textSize;
+        @Dimension
+        private int textPadding = StepView.this.textPadding;
+        @ColorInt
+        private int selectedStepNumberColor = StepView.this.selectedStepNumberColor;
+        @Dimension(unit = Dimension.SP)
+        private float stepNumberTextSize = StepView.this.stepNumberTextSize;
+        @ColorInt
+        private int doneStepMarkColor = StepView.this.doneStepMarkColor;
+        private int animationDuration = StepView.this.animationDuration;
+
+        public State animationType(@AnimationType int animationType) {
+            this.animationType = animationType;
+            return this;
+        }
+
+        public State selectedCircleColor(@ColorInt int selectedCircleColor) {
+            this.selectedCircleColor = selectedCircleColor;
+            return this;
+        }
+
+        public State selectedCircleRadius(@Dimension int selectedCircleRadius) {
+            this.selectedCircleRadius = selectedCircleRadius;
+            return this;
+        }
+
+        public State selectedTextColor(@ColorInt int selectedTextColor) {
+            this.selectedTextColor = selectedTextColor;
+            return this;
+        }
+
+        public State doneCircleColor(@ColorInt int doneCircleColor) {
+            this.doneCircleColor = doneCircleColor;
+            return this;
+        }
+
+        public State doneCircleRadius(@Dimension int doneCircleRadius) {
+            this.doneCircleRadius = doneCircleRadius;
+            return this;
+        }
+
+        public State doneTextColor(@ColorInt int doneTextColor) {
+            this.doneTextColor = doneTextColor;
+            return this;
+        }
+
+        public State nextTextColor(@ColorInt int nextTextColor) {
+            this.nextTextColor = nextTextColor;
+            return this;
+        }
+
+        public State stepPadding(@Dimension int stepPadding) {
+            this.stepPadding = stepPadding;
+            return this;
+        }
+
+        public State nextStepLineColor(@ColorInt int nextStepLineColor) {
+            this.nextStepLineColor = nextStepLineColor;
+            return this;
+        }
+
+        public State doneStepLineColor(@ColorInt int doneStepLineColor) {
+            this.doneStepLineColor = doneStepLineColor;
+            return this;
+        }
+
+        public State stepLineWidth(@Dimension int stepLineWidth) {
+            this.stepLineWidth = stepLineWidth;
+            return this;
+        }
+
+        public State textSize(@Dimension(unit = Dimension.SP) int textSize) {
+            this.textSize = textSize;
+            return this;
+        }
+
+        public State textPadding(@Dimension int textPadding) {
+            this.textPadding = textPadding;
+            return this;
+        }
+
+        public State selectedStepNumberColor(@ColorInt int selectedStepNumberColor) {
+            this.selectedStepNumberColor = selectedStepNumberColor;
+            return this;
+        }
+
+        public State stepNumberTextSize(@Dimension(unit = Dimension.SP) int stepNumberTextSize) {
+            this.stepNumberTextSize = stepNumberTextSize;
+            return this;
+        }
+
+        public State doneStepMarkColor(@ColorInt int doneStepMarkColor) {
+            this.doneStepMarkColor = doneStepMarkColor;
+            return this;
+        }
+
+        public State animationDuration(int animationDuration) {
+            this.animationDuration = animationDuration;
+            return this;
+        }
+
+        public State steps(List<String> steps) {
+            this.steps = steps;
+            return this;
+        }
+
+        public State stepsNumber(int stepsNumber) {
+            this.stepsNumber = stepsNumber;
+            return this;
+        }
+
+        public void commit() {
+            StepView.this.animationType = animationType;
+            StepView.this.selectedTextColor = selectedTextColor;
+            StepView.this.selectedCircleRadius = selectedCircleRadius;
+            StepView.this.selectedTextColor = selectedTextColor;
+            StepView.this.doneCircleColor = doneCircleColor;
+            StepView.this.doneCircleRadius = doneCircleRadius;
+            StepView.this.doneTextColor = doneTextColor;
+            StepView.this.nextTextColor = nextTextColor;
+            StepView.this.stepPadding = stepPadding;
+            StepView.this.nextStepLineColor = nextStepLineColor;
+            StepView.this.doneStepLineColor = doneStepLineColor;
+            StepView.this.stepLineWidth = stepLineWidth;
+            StepView.this.textSize = textSize;
+            StepView.this.textPadding = textPadding;
+            StepView.this.selectedStepNumberColor = selectedStepNumberColor;
+            StepView.this.stepNumberTextSize = stepNumberTextSize;
+            StepView.this.doneStepMarkColor = doneStepMarkColor;
+            StepView.this.animationDuration = animationDuration;
+            if (steps != null && !StepView.this.steps.equals(steps)) {
+                StepView.this.setSteps(steps);
+            } else if (stepsNumber != 0 && stepsNumber != StepView.this.stepsNumber) {
+                StepView.this.setStepsNumber(stepsNumber);
+            } else {
+                StepView.this.invalidate();
+            }
         }
     }
 }

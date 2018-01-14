@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         app:stepPadding="12dp"
-        app:doneStepLineColor="@color/stepview_line_next"
-        app:animationType="Circle"/>
+        app:animationType="All"
+        app:steps="@array/steps"/>
 
     <Button
         android:id="@+id/next"
