@@ -28,7 +28,6 @@ Specify steps with xml attribute:
 ```xml
 	app:steps="@array/steps"
 ```
-
 ```java
 	stepView.setSteps(List<String> steps);
 ```
@@ -38,7 +37,6 @@ Or Specify numbers of steps so that only circles with step number are shown:
 ```xml
 	app:stepsNumber="4"
 ```
-
 ```java
 	stepView.setStepsNumber(4);
 ```
@@ -58,7 +56,7 @@ Styling:
 	app:selectedTextColor="@color/colorAccent"
 	app:stepLineWidth="1dp"
 	app:stepPadding="4dp"
-    app:nextTextColor="@color/colorAccent"
+        app:nextTextColor="@color/colorAccent"
 	app:nextStepLineColor="@color/colorAccent"
 	app:doneCircleColor="@color/colorAccent"
 	app:doneStepLineColor="@color/colorAccent"
@@ -80,15 +78,15 @@ or instantiate and setup it in runtime with handy state builder:
             .selectedCircleColor(ContextCompat.getColor(this, R.color.colorAccent))
             .selectedCircleRadius(getResources().getDimensionPixelSize(R.dimen.dp14))
             .selectedStepNumberColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            // You should specify only stepsNumber or steps array of strings
-            // In case you specify both steps array are chosen.
+            // You should specify only stepsNumber or steps array of strings.
+            // In case you specify both steps array is chosen.
             .steps(new ArrayList<String>() {{
                 add("First step");
                 add("Second step");
                 add("Third step");
             }})
-            // You should specify only steps number or steps array of strings
-            // In case you specify both steps array are chosen.
+            // You should specify only steps number or steps array of strings.
+            // In case you specify both steps array is chosen.
             .stepsNumber(4)
             .animationDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
             .stepLineWidth(getResources().getDimensionPixelSize(R.dimen.dp1))
@@ -99,12 +97,10 @@ or instantiate and setup it in runtime with handy state builder:
 ```
 
 If you want to mark last step with a done mark:
-
 ```java
 	stepView.done(true);
 ```
 If you want to allow going back after that, you should unmark the done state:
-
 ```java
 	stepView.done(false)
 ```
