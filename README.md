@@ -104,6 +104,7 @@ If you want to allow going back after that, you should unmark the done state:
 ```java
 	stepView.done(false)
 ```
+See a sample for additional details.
 
 License
 =======
