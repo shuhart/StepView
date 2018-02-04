@@ -7,7 +7,7 @@ Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `compile 'com.shuhart.stepview:stepview:1.2.0'` to your dependencies.
+2. Add `compile 'com.shuhart.stepview:stepview:1.2.1'` to your dependencies.
 3. Add `StepView` into your layouts or view hierarchy.
 
 Supported animations:
@@ -68,7 +68,8 @@ Styling:
 	app:stepViewStyle="@style/StepView"
 	app:doneStepMarkColor="@color/colorPrimary"
 	app:stepNumberTextSize="12sp"
-	app:animationType="Line"/>
+	app:animationType="Line"
+    app:typeface="@font/roboto_italic"/>
 ```
 
 or instantiate and setup it in runtime with handy state builder:
@@ -94,6 +95,7 @@ or instantiate and setup it in runtime with handy state builder:
             .stepLineWidth(getResources().getDimensionPixelSize(R.dimen.dp1))
             .textSize(getResources().getDimensionPixelSize(R.dimen.sp14))
             .stepNumberTextSize(getResources().getDimensionPixelSize(R.dimen.sp16))
+            .typeface(ResourcesCompat.getFont(context, R.font.roboto_italic))
             // other state methods are equal to the corresponding xml attributes
             .commit();
 ```
@@ -108,6 +110,9 @@ If you want to allow going back after that, you should unmark the done state:
 ```java
 	stepView.done(false)
 ```
+
+If you want a custom typeface you should add font files to the resource folder "font" and reference any in xml layout.
+Alternatively you can specify typeface using the state builder in your code. Look into the sample for additional details on that.
 
 License
 =======

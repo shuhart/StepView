@@ -28,5 +28,6 @@
         </attr>
         <attr name="stepsNumber" format="integer" />
         <attr name="steps" format="reference" />
+        <attr name="typeface" format="reference" />
     </declare-styleable>
 </resources>

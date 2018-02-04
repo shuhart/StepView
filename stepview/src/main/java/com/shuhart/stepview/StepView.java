@@ -8,11 +8,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -112,9 +114,9 @@ public class StepView extends View {
 
     public StepView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        applyStyles(context, attrs, defStyleAttr);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setTextAlign(Paint.Align.CENTER);
+        applyStyles(context, attrs, defStyleAttr);
         drawEditMode();
     }
 
@@ -151,6 +153,13 @@ public class StepView extends View {
         Drawable background = ta.getDrawable(R.styleable.StepView_android_background);
         if (background != null) {
             setBackgroundDrawable(background);
+        }
+        int fontId = ta.getResourceId(R.styleable.StepView_typeface, 0);
+        if (fontId != 0) {
+            Typeface typeface = ResourcesCompat.getFont(context, fontId);
+            if (typeface != null) {
+                paint.setTypeface(typeface);
+            }
         }
         ta.recycle();
     }
@@ -624,6 +633,7 @@ public class StepView extends View {
         @ColorInt
         private int doneStepMarkColor = StepView.this.doneStepMarkColor;
         private int animationDuration = StepView.this.animationDuration;
+        private Typeface typeface = paint.getTypeface();
 
         public State animationType(@AnimationType int animationType) {
             this.animationType = animationType;
@@ -725,6 +735,11 @@ public class StepView extends View {
             return this;
         }
 
+        public State typeface(Typeface typeface) {
+            this.typeface = typeface;
+            return this;
+        }
+
         public void commit() {
             StepView.this.animationType = animationType;
             StepView.this.selectedTextColor = selectedTextColor;
@@ -751,6 +766,7 @@ public class StepView extends View {
             } else {
                 StepView.this.invalidate();
             }
+            paint.setTypeface(typeface);
         }
     }
 }
