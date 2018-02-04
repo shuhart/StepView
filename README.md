@@ -67,7 +67,7 @@ Styling:
 	app:doneStepMarkColor="@color/colorPrimary"
 	app:stepNumberTextSize="12sp"
 	app:animationType="Line"
-    app:typeface="@font/roboto_italic"/>
+    android:typeface="@font/roboto_italic"/>
 ```
 
 or instantiate and setup it in runtime with handy state builder:
