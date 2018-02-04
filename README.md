@@ -7,7 +7,7 @@ Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `compile 'com.shuhart.stepview:stepview:1.2.1'` to your dependencies.
+2. Add `compile 'com.shuhart.stepview:stepview:1.2.2'` to your dependencies.
 3. Add `StepView` into your layouts or view hierarchy.
 
 Supported animations:
@@ -106,7 +106,7 @@ If you want to allow going back after that, you should unmark the done state:
 ```java
 	stepView.done(false)
 ```
-See a sample for additional details.
+See the sample for additional details.
 
 If you want a custom typeface you should add font files to the resource folder "font" and reference any in xml layout.
 Alternatively you can specify typeface using the state builder in your code. Look into the sample for additional details on that.

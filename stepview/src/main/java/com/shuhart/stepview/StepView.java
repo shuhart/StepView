@@ -759,6 +759,7 @@ public class StepView extends View {
             StepView.this.stepNumberTextSize = stepNumberTextSize;
             StepView.this.doneStepMarkColor = doneStepMarkColor;
             StepView.this.animationDuration = animationDuration;
+            paint.setTypeface(typeface);
             if (steps != null && !StepView.this.steps.equals(steps)) {
                 StepView.this.setSteps(steps);
             } else if (stepsNumber != 0 && stepsNumber != StepView.this.stepsNumber) {
@@ -766,7 +767,6 @@ public class StepView extends View {
             } else {
                 StepView.this.invalidate();
             }
-            paint.setTypeface(typeface);
         }
     }
 }
