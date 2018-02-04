@@ -14,10 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:typeface="@font/roboto_italic"
         app:animationType="All"
         app:stepPadding="12dp"
-        app:steps="@array/steps"
-        app:typeface="@font/roboto_italic" />
+        app:steps="@array/steps" />
 
     <Button
         android:id="@+id/next"

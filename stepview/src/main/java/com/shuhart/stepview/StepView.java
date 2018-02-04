@@ -154,7 +154,7 @@ public class StepView extends View {
         if (background != null) {
             setBackgroundDrawable(background);
         }
-        int fontId = ta.getResourceId(R.styleable.StepView_typeface, 0);
+        int fontId = ta.getResourceId(R.styleable.StepView_android_typeface, 0);
         if (fontId != 0) {
             Typeface typeface = ResourcesCompat.getFont(context, fontId);
             if (typeface != null) {
