@@ -104,6 +104,8 @@ public class StepView extends View {
     private float animatedFraction;
     private boolean done;
 
+    private Rect bounds = new Rect();
+
     public StepView(Context context) {
         this(context, null);
     }
@@ -486,7 +488,7 @@ public class StepView extends View {
 
             paint.setColor(selectedStepNumberColor);
             paint.setTextSize(stepNumberTextSize);
-            canvas.drawText(number, circleCenterX, stepNumbersY, paint);
+            drawNumber(canvas, number, circleCenterX, paint);
 
             paint.setColor(selectedTextColor);
             paint.setTextSize(textSize);
@@ -519,16 +521,16 @@ public class StepView extends View {
                         int alpha = (int) (animatedFraction * 255);
                         paint.setAlpha(alpha);
                         paint.setTextSize(stepNumberTextSize * animatedFraction);
-                        canvas.drawText(number, circleCenterX, stepNumbersY, paint);
+                        drawNumber(canvas, number, circleCenterX, paint);
                     } else {
                         paint.setTextSize(stepNumberTextSize);
                         paint.setColor(nextTextColor);
-                        canvas.drawText(number, circleCenterX, stepNumbersY, paint);
+                        drawNumber(canvas, number, circleCenterX, paint);
                     }
                 } else {
                     paint.setTextSize(stepNumberTextSize);
                     paint.setColor(nextTextColor);
-                    canvas.drawText(number, circleCenterX, stepNumbersY, paint);
+                    drawNumber(canvas, number, circleCenterX, paint);
                 }
 
                 paint.setTextSize(textSize);
@@ -540,12 +542,18 @@ public class StepView extends View {
                 paint.setColor(nextTextColor);
 
                 paint.setTextSize(stepNumberTextSize);
-                canvas.drawText(number, circleCenterX, stepNumbersY, paint);
+                drawNumber(canvas, number, circleCenterX, paint);
 
                 paint.setTextSize(textSize);
                 drawText(canvas, text, circleCenterX, textY, paint);
             }
         }
+    }
+
+    private void drawNumber(Canvas canvas, String number, int circleCenterX, Paint paint) {
+        paint.getTextBounds(number, 0, number.length(), bounds);
+        float y = circlesY + bounds.height() / 2f - bounds.bottom;
+        canvas.drawText(number, circleCenterX, y, paint);
     }
 
     private void drawText(Canvas canvas, String text, int x, int y, Paint paint) {

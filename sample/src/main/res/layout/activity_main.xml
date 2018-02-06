@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:typeface="@font/roboto_italic"
+        android:typeface="@font/iran_sans_mobile"
         app:animationType="All"
         app:stepPadding="12dp"
         app:steps="@array/steps" />
