@@ -96,7 +96,6 @@ public class StepView extends View {
     private ValueAnimator animator;
 
     private int[] circlesX;
-    private int stepNumbersY;
     private int[] startLinesX;
     private int[] endLinesX;
     private int circlesY;
@@ -361,10 +360,8 @@ public class StepView extends View {
         circlesX = getCirclePositions();
         if (displayMode == DISPLAY_MODE_NO_TEXT) {
             paint.setTextSize(stepNumberTextSize);
-            stepNumbersY = (int) (circlesY + fontHeight() / 2 - paint.descent());
         } else {
             paint.setTextSize(stepNumberTextSize);
-            stepNumbersY = (int) (circlesY + fontHeight() / 2 - paint.descent());
             paint.setTextSize(textSize);
             textY = circlesY + selectedCircleRadius + textPadding + fontHeight() / 2;
         }
