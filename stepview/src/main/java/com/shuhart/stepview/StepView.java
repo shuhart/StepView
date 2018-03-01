@@ -184,6 +184,7 @@ public class StepView extends View {
     }
 
     public void setSteps(List<String> steps) {
+        stepsNumber = 0;
         displayMode = DISPLAY_MODE_WITH_TEXT;
         this.steps.clear();
         if (steps != null) {
