@@ -2,23 +2,23 @@
 <resources>
 
     <style name="StepView">
-        <item name="selectedCircleColor">@color/stepview_circle_selected</item>
-        <item name="selectedCircleRadius">14dp</item>
-        <item name="selectedTextColor">@color/stepview_text_selected</item>
-        <item name="selectedStepNumberColor">@color/stepview_selected_number</item>
-        <item name="stepNumberTextSize">12sp</item>
-        <item name="doneStepMarkColor">@color/stepview_mark</item>
-        <item name="doneCircleColor">@color/stepview_circle_done</item>
-        <item name="doneCircleRadius">14dp</item>
-        <item name="doneTextColor">@color/stepview_text_done</item>
-        <item name="nextTextColor">@color/stepview_text_next</item>
-        <item name="nextStepLineColor">@color/stepview_line_next</item>
-        <item name="doneStepLineColor">@color/stepview_line_done</item>
-        <item name="stepPadding">12dp</item>
-        <item name="textPadding">12dp</item>
-        <item name="stepLineWidth">0.5dp</item>
-        <item name="android:animationDuration">200</item>
-        <item name="android:textSize">14sp</item>
-        <item name="animationType">Line</item>
+        <item name="sv_selectedCircleColor">@color/stepview_circle_selected</item>
+        <item name="sv_selectedCircleRadius">14dp</item>
+        <item name="sv_selectedTextColor">@color/stepview_text_selected</item>
+        <item name="sv_selectedStepNumberColor">@color/stepview_selected_number</item>
+        <item name="sv_stepNumberTextSize">12sp</item>
+        <item name="sv_doneStepMarkColor">@color/stepview_mark</item>
+        <item name="sv_doneCircleColor">@color/stepview_circle_done</item>
+        <item name="sv_doneCircleRadius">14dp</item>
+        <item name="sv_doneTextColor">@color/stepview_text_done</item>
+        <item name="sv_nextTextColor">@color/stepview_text_next</item>
+        <item name="sv_nextStepLineColor">@color/stepview_line_next</item>
+        <item name="sv_doneStepLineColor">@color/stepview_line_done</item>
+        <item name="sv_stepPadding">12dp</item>
+        <item name="sv_textPadding">12dp</item>
+        <item name="sv_stepLineWidth">0.5dp</item>
+        <item name="sv_animationDuration">200</item>
+        <item name="sv_textSize">14sp</item>
+        <item name="sv_animationType">Line</item>
     </style>
 </resources>

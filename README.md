@@ -7,7 +7,7 @@ Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `implementation 'com.shuhart.stepview:stepview:1.2.5'` to your dependencies.
+2. Add `implementation 'com.shuhart.stepview:stepview:1.2.6'` to your dependencies.
 3. Add `StepView` into your layouts or view hierarchy.
 
 Supported animations:
@@ -52,22 +52,22 @@ Styling:
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:padding="16dp"
-	app:selectedCircleColor="@color/colorAccent"
-	app:selectedTextColor="@color/colorAccent"
-	app:stepLineWidth="1dp"
-	app:stepPadding="4dp"
-        app:nextTextColor="@color/colorAccent"
-	app:nextStepLineColor="@color/colorAccent"
-	app:doneCircleColor="@color/colorAccent"
-	app:doneStepLineColor="@color/colorAccent"
-	app:doneCircleRadius="12dp"
-	app:selectedCircleRadius="12dp"
-	app:selectedStepNumberColor="@color/colorPrimary"
-	app:stepViewStyle="@style/StepView"
-	app:doneStepMarkColor="@color/colorPrimary"
-	app:stepNumberTextSize="12sp"
-	app:animationType="Line"
-    android:typeface="@font/roboto_italic"/>
+	app:sv_selectedCircleColor="@color/colorAccent"
+	app:sv_selectedTextColor="@color/colorAccent"
+	app:sv_stepLineWidth="1dp"
+	app:sv_stepPadding="4dp"
+    app:sv_nextTextColor="@color/colorAccent"
+	app:sv_nextStepLineColor="@color/colorAccent"
+	app:sv_doneCircleColor="@color/colorAccent"
+	app:sv_doneStepLineColor="@color/colorAccent"
+	app:sv_doneCircleRadius="12dp"
+	app:sv_selectedCircleRadius="12dp"
+	app:sv_selectedStepNumberColor="@color/colorPrimary"
+	app:sv_stepViewStyle="@style/StepView"
+	app:sv_doneStepMarkColor="@color/colorPrimary"
+	app:sv_stepNumberTextSize="12sp"
+	app:sv_animationType="Line"
+    app:sv_typeface="@font/roboto_italic"/>
 ```
 
 or instantiate and setup it in runtime with handy state builder:

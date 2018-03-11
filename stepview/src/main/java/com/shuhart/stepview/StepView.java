@@ -110,7 +110,7 @@ public class StepView extends View {
     }
 
     public StepView(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.stepViewStyle);
+        this(context, attrs, R.attr.sv_stepViewStyle);
     }
 
     public StepView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -123,26 +123,26 @@ public class StepView extends View {
 
     private void applyStyles(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.StepView, defStyleAttr, R.style.StepView);
-        selectedCircleColor = ta.getColor(R.styleable.StepView_selectedCircleColor, 0);
-        selectedCircleRadius = ta.getDimensionPixelSize(R.styleable.StepView_selectedCircleRadius, 0);
-        selectedTextColor = ta.getColor(R.styleable.StepView_selectedTextColor, 0);
-        selectedStepNumberColor = ta.getColor(R.styleable.StepView_selectedStepNumberColor, 0);
-        doneStepMarkColor = ta.getColor(R.styleable.StepView_doneStepMarkColor, 0);
-        doneCircleColor = ta.getColor(R.styleable.StepView_doneCircleColor, 0);
-        doneCircleRadius = ta.getDimensionPixelSize(R.styleable.StepView_doneCircleRadius, 0);
-        doneTextColor = ta.getColor(R.styleable.StepView_doneTextColor, 0);
-        nextTextColor = ta.getColor(R.styleable.StepView_nextTextColor, 0);
-        stepPadding = ta.getDimensionPixelSize(R.styleable.StepView_stepPadding, 0);
-        nextStepLineColor = ta.getColor(R.styleable.StepView_nextStepLineColor, 0);
-        doneStepLineColor = ta.getColor(R.styleable.StepView_doneStepLineColor, 0);
-        stepLineWidth = ta.getDimensionPixelSize(R.styleable.StepView_stepLineWidth, 0);
-        textPadding = ta.getDimensionPixelSize(R.styleable.StepView_textPadding, 0);
-        stepNumberTextSize = ta.getDimension(R.styleable.StepView_stepNumberTextSize, 0);
-        textSize = ta.getDimension(R.styleable.StepView_android_textSize, 0);
-        animationDuration = ta.getInteger(R.styleable.StepView_android_animationDuration, 0);
-        animationType = ta.getInteger(R.styleable.StepView_animationType, 0);
-        stepsNumber = ta.getInteger(R.styleable.StepView_stepsNumber, 0);
-        CharSequence[] descriptions = ta.getTextArray(R.styleable.StepView_steps);
+        selectedCircleColor = ta.getColor(R.styleable.StepView_sv_selectedCircleColor, 0);
+        selectedCircleRadius = ta.getDimensionPixelSize(R.styleable.StepView_sv_selectedCircleRadius, 0);
+        selectedTextColor = ta.getColor(R.styleable.StepView_sv_selectedTextColor, 0);
+        selectedStepNumberColor = ta.getColor(R.styleable.StepView_sv_selectedStepNumberColor, 0);
+        doneStepMarkColor = ta.getColor(R.styleable.StepView_sv_doneStepMarkColor, 0);
+        doneCircleColor = ta.getColor(R.styleable.StepView_sv_doneCircleColor, 0);
+        doneCircleRadius = ta.getDimensionPixelSize(R.styleable.StepView_sv_doneCircleRadius, 0);
+        doneTextColor = ta.getColor(R.styleable.StepView_sv_doneTextColor, 0);
+        nextTextColor = ta.getColor(R.styleable.StepView_sv_nextTextColor, 0);
+        stepPadding = ta.getDimensionPixelSize(R.styleable.StepView_sv_stepPadding, 0);
+        nextStepLineColor = ta.getColor(R.styleable.StepView_sv_nextStepLineColor, 0);
+        doneStepLineColor = ta.getColor(R.styleable.StepView_sv_doneStepLineColor, 0);
+        stepLineWidth = ta.getDimensionPixelSize(R.styleable.StepView_sv_stepLineWidth, 0);
+        textPadding = ta.getDimensionPixelSize(R.styleable.StepView_sv_textPadding, 0);
+        stepNumberTextSize = ta.getDimension(R.styleable.StepView_sv_stepNumberTextSize, 0);
+        textSize = ta.getDimension(R.styleable.StepView_sv_textSize, 0);
+        animationDuration = ta.getInteger(R.styleable.StepView_sv_animationDuration, 0);
+        animationType = ta.getInteger(R.styleable.StepView_sv_animationType, 0);
+        stepsNumber = ta.getInteger(R.styleable.StepView_sv_stepsNumber, 0);
+        CharSequence[] descriptions = ta.getTextArray(R.styleable.StepView_sv_steps);
         if (descriptions != null) {
             for (CharSequence item : descriptions) {
                 steps.add(item.toString());
@@ -151,11 +151,11 @@ public class StepView extends View {
         } else {
             displayMode = DISPLAY_MODE_NO_TEXT;
         }
-        Drawable background = ta.getDrawable(R.styleable.StepView_android_background);
+        Drawable background = ta.getDrawable(R.styleable.StepView_sv_background);
         if (background != null) {
             setBackgroundDrawable(background);
         }
-        int fontId = ta.getResourceId(R.styleable.StepView_android_typeface, 0);
+        int fontId = ta.getResourceId(R.styleable.StepView_sv_typeface, 0);
         if (fontId != 0) {
             Typeface typeface = ResourcesCompat.getFont(context, fontId);
             if (typeface != null) {
