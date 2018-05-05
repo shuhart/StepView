@@ -416,7 +416,7 @@ public class StepView extends View {
         if (result.length == 1) {
             return result;
         }
-        result[result.length - 1] = getMeasuredWidth() - getPaddingRight();
+        result[result.length - 1] = getMeasuredWidth() - getPaddingRight() - selectedCircleRadius;
         float spaceLeft = result[result.length - 1] - result[0];
         int margin = (int) (spaceLeft / (result.length - 1));
         for (int i = 1; i < result.length - 1; i++) {
