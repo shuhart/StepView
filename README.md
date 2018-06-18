@@ -7,7 +7,7 @@ Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `implementation 'com.shuhart.stepview:stepview:1.2.6'` to your dependencies.
+2. Add `implementation 'com.shuhart.stepview:stepview:1.2.8'` to your dependencies.
 3. Add `StepView` into your layouts or view hierarchy.
 
 Supported animations:
@@ -56,7 +56,7 @@ Styling:
 	app:sv_selectedTextColor="@color/colorAccent"
 	app:sv_stepLineWidth="1dp"
 	app:sv_stepPadding="4dp"
-        app:sv_nextTextColor="@color/colorAccent"
+  app:sv_nextTextColor="@color/colorAccent"
 	app:sv_nextStepLineColor="@color/colorAccent"
 	app:sv_doneCircleColor="@color/colorAccent"
 	app:sv_doneStepLineColor="@color/colorAccent"
@@ -67,7 +67,7 @@ Styling:
 	app:sv_doneStepMarkColor="@color/colorPrimary"
 	app:sv_stepNumberTextSize="12sp"
 	app:sv_animationType="Line"
-        app:sv_typeface="@font/roboto_italic"/>
+  app:sv_typeface="@font/roboto_italic"/>
 ```
 
 or instantiate and setup it in runtime with handy state builder:
