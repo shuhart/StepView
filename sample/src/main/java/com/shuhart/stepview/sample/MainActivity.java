@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shuhart.stepview.StepView;
 
@@ -29,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         stepView.go(1, true);
+        stepView.setOnStepClickListener(new StepView.OnStepClickListener() {
+            @Override
+            public void onStepClick(int step) {
+                Toast.makeText(MainActivity.this, "Step " + step, Toast.LENGTH_SHORT).show();
+            }
+        });
         findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

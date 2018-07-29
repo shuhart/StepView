@@ -16,6 +16,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.shuhart.stepview.animation.AnimatorListener;
@@ -26,6 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StepView extends View {
+
+    public interface OnStepClickListener {
+        /**
+         * Index of the first step is 0.
+         *
+         * @param step index of the step clicked.
+         */
+        void onStepClick(int step);
+    }
+
     public static final int ANIMATION_LINE = 0;
     public static final int ANIMATION_CIRCLE = 1;
     public static final int ANIMATION_ALL = 2;
@@ -44,6 +55,7 @@ public class StepView extends View {
     public @interface DisplayMode {
     }
 
+    private OnStepClickListener onStepClickListener;
     private static final int ANIMATE_STEP_TRANSITION = 0;
     private static final int IDLE = 1;
 
@@ -98,6 +110,7 @@ public class StepView extends View {
     private int[] circlesX;
     private int[] startLinesX;
     private int[] endLinesX;
+    private float[] constraints;
     private int circlesY;
     private int textY;
     private float animatedFraction;
@@ -181,6 +194,37 @@ public class StepView extends View {
                 setStepsNumber(stepsNumber);
             }
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final boolean superResult = super.onTouchEvent(event);
+        if (onStepClickListener != null && isEnabled()) {
+            final int action = event.getActionMasked();
+            if (action == MotionEvent.ACTION_UP) {
+                float x = event.getX();
+                float y = event.getY();
+                int step = getStepByPointer(x, y);
+                onStepClickListener.onStepClick(step);
+            }
+        }
+        return superResult;
+    }
+
+    protected int getStepByPointer(float x, float y) {
+        int count = getStepCount();
+        for (int i = 0; i < constraints.length; i++) {
+            float constraint = constraints[i];
+            if (x <= constraint) {
+                return i;
+            }
+        }
+        return count - 1;
+    }
+
+    public void setOnStepClickListener(OnStepClickListener listener) {
+        setClickable(listener != null);
+        onStepClickListener = listener;
     }
 
     public void setSteps(List<String> steps) {
@@ -308,12 +352,23 @@ public class StepView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
+        int width = measureWidth(widthMeasureSpec);
+        measureConstraints(width);
+        int height = measureHeight(heightMeasureSpec);
+        setMeasuredDimension(width, height);
         measureAttributes();
     }
 
     private int measureWidth(int widthMeasureSpec) {
         return MeasureSpec.getSize(widthMeasureSpec);
+    }
+
+    private void measureConstraints(int width) {
+        constraints = new float[getStepCount()];
+        constraints[0] = width / getStepCount();
+        for (int i = 1; i < constraints.length; i++) {
+            constraints[i] = constraints[i - 1] * (i + 1);
+        }
     }
 
     private int measureHeight(int heightMeasureSpec) {
@@ -490,7 +545,7 @@ public class StepView extends View {
 
             paint.setColor(selectedTextColor);
             paint.setTextSize(textSize);
-            drawText(canvas, text, circleCenterX, textY, paint);
+            drawText(canvas, paint, text, circleCenterX, textY, step);
         } else if (isDone) {
             paint.setColor(doneCircleColor);
             canvas.drawCircle(circleCenterX, circleCenterY, doneCircleRadius, paint);
@@ -505,7 +560,7 @@ public class StepView extends View {
                 paint.setColor(doneTextColor);
             }
             paint.setTextSize(textSize);
-            drawText(canvas, text, circleCenterX, textY, paint);
+            drawText(canvas, paint, text, circleCenterX, textY, step);
         } else {
             if (state == ANIMATE_STEP_TRANSITION && step == nextAnimatedStep && nextAnimatedStep > currentStep) {
                 if (animationType == ANIMATION_CIRCLE || animationType == ANIMATION_ALL) {
@@ -535,7 +590,7 @@ public class StepView extends View {
                 paint.setColor(nextTextColor);
                 int alpha = (int) Math.max(Color.alpha(nextTextColor), animatedFraction * 255);
                 paint.setAlpha(alpha);
-                drawText(canvas, text, circleCenterX, textY, paint);
+                drawText(canvas, paint, text, circleCenterX, textY, step);
             } else {
                 paint.setColor(nextTextColor);
 
@@ -543,7 +598,7 @@ public class StepView extends View {
                 drawNumber(canvas, number, circleCenterX, paint);
 
                 paint.setTextSize(textSize);
-                drawText(canvas, text, circleCenterX, textY, paint);
+                drawText(canvas, paint, text, circleCenterX, textY, step);
             }
         }
     }
@@ -554,7 +609,7 @@ public class StepView extends View {
         canvas.drawText(number, circleCenterX, y, paint);
     }
 
-    private void drawText(Canvas canvas, String text, int x, int y, Paint paint) {
+    private void drawText(Canvas canvas, Paint paint, String text, int x, int y, int step) {
         if (text.isEmpty()) {
             return;
         }
