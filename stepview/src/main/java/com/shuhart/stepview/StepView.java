@@ -15,6 +15,9 @@ import android.support.annotation.Dimension;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -105,6 +108,7 @@ public class StepView extends View {
     private int animationDuration;
 
     private Paint paint;
+    private TextPaint textPaint;
     private ValueAnimator animator;
 
     private int[] circlesX;
@@ -115,6 +119,7 @@ public class StepView extends View {
     private int textY;
     private float animatedFraction;
     private boolean done;
+    private StaticLayout[] textLayouts;
 
     private Rect bounds = new Rect();
 
@@ -130,6 +135,8 @@ public class StepView extends View {
         super(context, attrs, defStyleAttr);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setTextAlign(Paint.Align.CENTER);
+        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setTextAlign(Paint.Align.CENTER);
         applyStyles(context, attrs, defStyleAttr);
         drawEditMode();
     }
@@ -172,9 +179,11 @@ public class StepView extends View {
         if (fontId != 0) {
             Typeface typeface = ResourcesCompat.getFont(context, fontId);
             if (typeface != null) {
+                textPaint.setTypeface(typeface);
                 paint.setTypeface(typeface);
             }
         }
+        textPaint.setTextSize(textSize);
         ta.recycle();
     }
 
@@ -367,7 +376,7 @@ public class StepView extends View {
         constraints = new float[getStepCount()];
         constraints[0] = width / getStepCount();
         for (int i = 1; i < constraints.length; i++) {
-            constraints[i] = constraints[i - 1] * (i + 1);
+            constraints[i] = constraints[0] * (i + 1);
         }
     }
 
@@ -388,28 +397,23 @@ public class StepView extends View {
         return height;
     }
 
-    private int fontHeight() {
-        return (int) Math.ceil(paint.descent() - paint.ascent());
-    }
-
     private int measureStepsHeight() {
-        paint.setTextSize(textSize);
-        int fontHeight = fontHeight();
+        textLayouts = new StaticLayout[steps.size()];
+        textPaint.setTextSize(textSize);
         int max = 0;
         for (int i = 0; i < steps.size(); i++) {
             String text = steps.get(i);
-            String[] split = text.split("\\n");
-            if (split.length == 1) {
-                max = Math.max(fontHeight, max);
-            } else {
-                max = Math.max(fontHeight * split.length, max);
-            }
+            textLayouts[i] = new StaticLayout(text, textPaint,
+                    getMeasuredWidth() / steps.size(),
+                    Layout.Alignment.ALIGN_NORMAL, 1, 0, true);
+            int height = textLayouts[i].getHeight();
+            max = Math.max(height, max);
         }
         return max;
     }
 
     private void measureAttributes() {
-        circlesY = (getMeasuredHeight() - getPaddingTop() - getPaddingBottom()) / 2;
+        circlesY = getCircleY();
         if (displayMode == DISPLAY_MODE_NO_TEXT) {
             circlesY += getPaddingTop();
         }
@@ -419,9 +423,27 @@ public class StepView extends View {
         } else {
             paint.setTextSize(stepNumberTextSize);
             paint.setTextSize(textSize);
-            textY = circlesY + selectedCircleRadius + textPadding + fontHeight() / 2;
+            textY = circlesY + selectedCircleRadius + textPadding;
         }
         measureLines();
+    }
+
+    private int getCircleY() {
+        int availableHeight = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
+        int maxItemHeight = getMaxTextHeight() + Math.max(selectedCircleRadius, doneCircleRadius) + textPadding;
+        int additionalPadding = (availableHeight - maxItemHeight) / 2;
+        return getPaddingTop() + additionalPadding + selectedCircleRadius;
+    }
+
+    private int getMaxTextHeight() {
+        int max = 0;
+        if (textLayouts == null || textLayouts.length == 0) {
+            return max;
+        }
+        for (StaticLayout tl : textLayouts) {
+            max = Math.max(tl.getHeight(), max);
+        }
+        return max;
     }
 
     private int[] getCirclePositions() {
@@ -543,9 +565,9 @@ public class StepView extends View {
             paint.setTextSize(stepNumberTextSize);
             drawNumber(canvas, number, circleCenterX, paint);
 
-            paint.setColor(selectedTextColor);
-            paint.setTextSize(textSize);
-            drawText(canvas, paint, text, circleCenterX, textY, step);
+            textPaint.setTextSize(textSize);
+            textPaint.setColor(selectedTextColor);
+            drawText(canvas, text, textY, step);
         } else if (isDone) {
             paint.setColor(doneCircleColor);
             canvas.drawCircle(circleCenterX, circleCenterY, doneCircleRadius, paint);
@@ -559,8 +581,9 @@ public class StepView extends View {
             } else {
                 paint.setColor(doneTextColor);
             }
-            paint.setTextSize(textSize);
-            drawText(canvas, paint, text, circleCenterX, textY, step);
+            textPaint.setTextSize(textSize);
+            textPaint.setColor(doneTextColor);
+            drawText(canvas, text, textY, step);
         } else {
             if (state == ANIMATE_STEP_TRANSITION && step == nextAnimatedStep && nextAnimatedStep > currentStep) {
                 if (animationType == ANIMATION_CIRCLE || animationType == ANIMATION_ALL) {
@@ -586,19 +609,20 @@ public class StepView extends View {
                     drawNumber(canvas, number, circleCenterX, paint);
                 }
 
-                paint.setTextSize(textSize);
-                paint.setColor(nextTextColor);
+                textPaint.setTextSize(textSize);
+                textPaint.setColor(nextTextColor);
                 int alpha = (int) Math.max(Color.alpha(nextTextColor), animatedFraction * 255);
-                paint.setAlpha(alpha);
-                drawText(canvas, paint, text, circleCenterX, textY, step);
+                textPaint.setAlpha(alpha);
+                drawText(canvas, text, textY, step);
             } else {
                 paint.setColor(nextTextColor);
 
                 paint.setTextSize(stepNumberTextSize);
                 drawNumber(canvas, number, circleCenterX, paint);
 
-                paint.setTextSize(textSize);
-                drawText(canvas, paint, text, circleCenterX, textY, step);
+                textPaint.setTextSize(textSize);
+                textPaint.setColor(nextTextColor);
+                drawText(canvas, text, textY, step);
             }
         }
     }
@@ -609,18 +633,15 @@ public class StepView extends View {
         canvas.drawText(number, circleCenterX, y, paint);
     }
 
-    private void drawText(Canvas canvas, Paint paint, String text, int x, int y, int step) {
+    private void drawText(Canvas canvas, String text, int y, int step) {
         if (text.isEmpty()) {
             return;
         }
-        String[] split = text.split("\\n");
-        if (split.length == 1) {
-            canvas.drawText(text, x, y, paint);
-        } else {
-            for (int i = 0; i < split.length; i++) {
-                canvas.drawText(split[i], x, y + i * fontHeight(), paint);
-            }
-        }
+        StaticLayout layout = textLayouts[step];
+        canvas.save();
+        canvas.translate(circlesX[step], y);
+        layout.draw(canvas);
+        canvas.restore();
     }
 
     private void drawCheckMark(Canvas canvas, int circleCenterX, int circleCenterY) {
