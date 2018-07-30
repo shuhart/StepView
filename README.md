@@ -7,7 +7,7 @@ Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `implementation 'com.shuhart.stepview:stepview:1.2.8'` to your dependencies.
+2. Add `implementation 'com.shuhart.stepview:stepview:1.3.0'` to your dependencies.
 3. Add `StepView` into your layouts or view hierarchy.
 
 Supported animations:
@@ -56,7 +56,7 @@ Styling:
 	app:sv_selectedTextColor="@color/colorAccent"
 	app:sv_stepLineWidth="1dp"
 	app:sv_stepPadding="4dp"
-  app:sv_nextTextColor="@color/colorAccent"
+    app:sv_nextTextColor="@color/colorAccent"
 	app:sv_nextStepLineColor="@color/colorAccent"
 	app:sv_doneCircleColor="@color/colorAccent"
 	app:sv_doneStepLineColor="@color/colorAccent"
@@ -106,6 +106,17 @@ If you want to allow going back after that, you should unmark the done state:
 ```java
 	stepView.done(false)
 ```
+
+You can set a step click listener:
+```java
+    stepView.setOnStepClickListener(new StepView.OnStepClickListener() {
+        @Override
+        public void onStepClick(int step) {
+            // 0 is the first step
+        }
+    });
+```
+
 See the sample for additional details.
 
 If you want a custom typeface you should add font files to the resource folder "font" and reference any in xml layout.
