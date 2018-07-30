@@ -430,6 +430,9 @@ public class StepView extends View {
 
     private int getCircleY() {
         int availableHeight = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
+        if (displayMode == DISPLAY_MODE_NO_TEXT) {
+            return availableHeight / 2;
+        }
         int maxItemHeight = getMaxTextHeight() + Math.max(selectedCircleRadius, doneCircleRadius) + textPadding;
         int additionalPadding = (availableHeight - maxItemHeight) / 2;
         return getPaddingTop() + additionalPadding + selectedCircleRadius;
