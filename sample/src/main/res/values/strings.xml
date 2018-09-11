@@ -2,4 +2,38 @@
     <string name="app_name">StepView</string>
     <string name="btn_next">Next</string>
     <string name="btn_back">Back</string>
+    <string name="main_list_item_simple_title">Simple</string>
+    <string name="main_list_item_simple_subtitle">StepView inside ConstrainLayout</string>
+    <string name="main_list_item_recyclerview_title">RecyclerView</string>
+    <string name="main_list_item_recyclerview_subtitle">StepView inside RecyclerView</string>
+    <string name="main_list_item_scrollview_title">ScrollView</string>
+    <string name="main_list_item_scrollview_subtitle">StepView inside ScrollView</string>
+    <string name="dummy_text">Performance profilers
+Android Studio provides performance profilers so you can more easily track your app’s memory and CPU usage, find deallocated objects, locate memory leaks, optimize graphics performance, and analyze network requests. With your app running on a device or emulator, open the Android Profiler tab.
+
+For more information about performance profilers, see Performance profiling tools.
+
+
+Heap dump
+When you’re profiling memory usage in Android Studio, you can simultaneously initiate garbage collection and dump the Java heap to a heap snapshot in an Android-specific HPROF binary format file. The HPROF viewer displays classes, instances of each class, and a reference tree to help you track memory usage and find memory leaks.
+
+For more informatin about working with heap dumps, see Inspect the heap and allocations.
+
+
+Memory Profiler
+You can use Memory Profiler to track memory allocation and watch where objects are being allocated when you perform certain actions. Knowing these allocations enables you to optimize your app’s performance and memory use by adjusting the method calls related to those actions.
+
+For information about tracking and analyzing allocations, see Inspect the heap and allocations.
+
+
+Data file access
+The Android SDK tools, such as Systrace, and logcat, generate performance and debugging data for detailed app analysis.
+
+To view the available generated data files, open the Captures tool window. In the list of the generated files, double-click a file to view the data. Right-click any .hprof files to convert them to the standard Investigate your RAM usage file format.
+
+
+Code inspections
+Whenever you compile your program, Android Studio automatically runs configured Lint and other IDE inspections to help you easily identify and correct problems with the structural quality of your code.
+
+The Lint tool checks your Android project source files for potential bugs and optimization improvements for correctness, security, performance, usability, accessibility, and internationalization.</string>
 </resources>

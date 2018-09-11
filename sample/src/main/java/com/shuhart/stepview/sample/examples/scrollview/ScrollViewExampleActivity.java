@@ -1,39 +1,29 @@
-package com.shuhart.stepview.sample;
+package com.shuhart.stepview.sample.examples.scrollview;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shuhart.stepview.StepView;
+import com.shuhart.stepview.sample.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class ScrollViewExampleActivity extends AppCompatActivity {
     private int currentStep = 0;
 
-    @SuppressLint("SetTextI18n")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_scrollview);
         final StepView stepView = findViewById(R.id.step_view);
-//        stepView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                // still, it's very unlikely you are going to see this animation
-//                stepView.go(1, true);
-//            }
-//        });
-        stepView.go(1, true);
         stepView.setOnStepClickListener(new StepView.OnStepClickListener() {
             @Override
             public void onStepClick(int step) {
-                Toast.makeText(MainActivity.this, "Step " + step, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScrollViewExampleActivity.this, "Step " + step, Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
@@ -57,5 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 stepView.go(currentStep, true);
             }
         });
+        List<String> steps = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            steps.add("Step " + (i + 1));
+        }
+        stepView.setSteps(steps);
     }
 }

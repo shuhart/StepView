@@ -361,6 +361,10 @@ public class StepView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (getStepCount() == 0) {
+            setMeasuredDimension(0, 0);
+            return;
+        }
         int width = measureWidth(widthMeasureSpec);
         measureConstraints(width);
         int height = measureHeight(heightMeasureSpec);
@@ -381,20 +385,36 @@ public class StepView extends View {
     }
 
     private int measureHeight(int heightMeasureSpec) {
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        if (getMeasuredWidth() == 0) return 0;
 
-        if (heightMode == MeasureSpec.AT_MOST) {
-            height = getPaddingTop()
-                    + getPaddingBottom()
-                    + (Math.max(selectedCircleRadius, doneCircleRadius)) * 2
-                    + (displayMode == DISPLAY_MODE_WITH_TEXT ? textPadding : 0);
-            if (!steps.isEmpty()) {
-                height += measureStepsHeight();
-            }
+        int specSize = MeasureSpec.getSize(heightMeasureSpec);
+        int specMode = MeasureSpec.getMode(heightMeasureSpec);
+        int desiredSize = getPaddingTop()
+                + getPaddingBottom()
+                + (Math.max(selectedCircleRadius, doneCircleRadius)) * 2
+                + (displayMode == DISPLAY_MODE_WITH_TEXT ? textPadding : 0);
+        if (!steps.isEmpty()) {
+            desiredSize += measureStepsHeight();
+        }
+        int result = 0;
+
+        switch (specMode) {
+            case MeasureSpec.UNSPECIFIED:
+                // Parent says we can be as big as we want.
+                result = desiredSize;
+                break;
+            case MeasureSpec.AT_MOST:
+                // Parent says we can be as big as we want, up to specSize.
+                // Don't be larger than specSize
+                result = Math.min(desiredSize, specSize);
+                break;
+            case MeasureSpec.EXACTLY:
+                // No choice. Do what we are told.
+                result = specSize;
+                break;
         }
 
-        return height;
+        return result;
     }
 
     private int measureStepsHeight() {
@@ -403,9 +423,15 @@ public class StepView extends View {
         int max = 0;
         for (int i = 0; i < steps.size(); i++) {
             String text = steps.get(i);
-            textLayouts[i] = new StaticLayout(text, textPaint,
+            textLayouts[i] = new StaticLayout(
+                    text,
+                    textPaint,
                     getMeasuredWidth() / steps.size(),
-                    Layout.Alignment.ALIGN_NORMAL, 1, 0, true);
+                    Layout.Alignment.ALIGN_NORMAL,
+                    1,
+                    0,
+                    true
+            );
             int height = textLayouts[i].getHeight();
             max = Math.max(height, max);
         }
@@ -460,6 +486,7 @@ public class StepView extends View {
     private int[] measureSteps() {
         int[] result = new int[steps.size()];
         for (int i = 0; i < steps.size(); i++) {
+            // TODO use StaticLayout?
             result[i] = (int) paint.measureText(steps.get(i)) + /* correct possible conversion error */ 1;
         }
         return result;
@@ -518,6 +545,8 @@ public class StepView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (getHeight() == 0) return;
+
         final int stepSize = getStepCount();
 
         if (stepSize == 0) {
