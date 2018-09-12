@@ -49,7 +49,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         return items == null ? 0 : items.size();
     }
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder {
+    static class MainViewHolder extends RecyclerView.ViewHolder {
 
         ItemClickListener listener;
         Item item;
@@ -57,7 +57,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         private TextView titleTextView;
         private TextView subtitleTextView;
 
-        public MainViewHolder(View itemView) {
+        MainViewHolder(View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.title);
             subtitleTextView = itemView.findViewById(R.id.subtitle);
@@ -83,6 +83,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                     subtitle = subtitleTextView.getContext().getString(R.string.main_list_item_scrollview_subtitle);
                     break;
                 }
+                case CUSTOMISE:
+                    title = titleTextView.getContext().getString(R.string.main_list_item_customise_title);
+                    subtitle = subtitleTextView.getContext().getString(R.string.main_list_item_customise_subtitle);
+                    break;
             }
             Assert.assertNotNull(title);
             Assert.assertNotNull(subtitle);
@@ -106,6 +110,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public enum Item {
         SIMPLE,
         RECYCLER_VIEW,
-        SCROLL_VIEW
+        SCROLL_VIEW,
+        CUSTOMISE
     }
 }

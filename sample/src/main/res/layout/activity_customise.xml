@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        tools:context=".main.MainActivity">
+
+        <com.shuhart.stepview.StepView
+            android:id="@+id/step_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:sv_animationType="All"
+            app:sv_stepPadding="12dp"
+            app:sv_typeface="@font/iran_sans_mobile" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/btn_next"
+            app:layout_constraintLeft_toRightOf="@+id/back"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/step_view" />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/btn_back"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/next"
+            app:layout_constraintTop_toBottomOf="@id/step_view" />
+
+        <TextView
+            android:id="@+id/hint_selected_circle_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/hint_selected_circle_color"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/back" />
+
+        <EditText
+            android:id="@+id/selected_circle_color_hex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:hint="@string/hint_selected_circle_color"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/selected_circle_color_sample_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/hint_selected_circle_color"
+            tools:ignore="TextFields" />
+
+        <FrameLayout
+            android:id="@+id/selected_circle_color_sample_wrapper"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintLeft_toRightOf="@id/selected_circle_color_hex"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hint_selected_circle_color">
+
+            <ImageView
+                android:id="@+id/selected_circle_color_sample"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                tools:ignore="ContentDescription"
+                tools:src="@color/colorPrimary" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/hint_selected_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/hint_selected_text_color"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selected_circle_color_hex" />
+
+        <EditText
+            android:id="@+id/selected_text_color_hex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:hint="@string/hint_selected_circle_color"
+            android:textColor="@android:color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/selected_text_color_sample_wrapper"
+            app:layout_constraintTop_toBottomOf="@id/hint_selected_text_color"
+            tools:ignore="TextFields" />
+
+        <FrameLayout
+            android:id="@+id/selected_text_color_sample_wrapper"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintLeft_toRightOf="@id/selected_text_color_hex"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hint_selected_text_color">
+
+            <ImageView
+                android:id="@+id/selected_text_color_sample"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                tools:ignore="ContentDescription"
+                tools:src="@color/colorPrimary" />
+        </FrameLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

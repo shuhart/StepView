@@ -2,12 +2,18 @@
     <string name="app_name">StepView</string>
     <string name="btn_next">Next</string>
     <string name="btn_back">Back</string>
+    <string name="btn_apply">Apply</string>
+    <string name="hint_selected_circle_color">Selected circle color</string>
+    <string name="hint_selected_text_color">Selected text color</string>
     <string name="main_list_item_simple_title">Simple</string>
     <string name="main_list_item_simple_subtitle">StepView inside ConstrainLayout</string>
     <string name="main_list_item_recyclerview_title">RecyclerView</string>
     <string name="main_list_item_recyclerview_subtitle">StepView inside RecyclerView</string>
     <string name="main_list_item_scrollview_title">ScrollView</string>
     <string name="main_list_item_scrollview_subtitle">StepView inside ScrollView</string>
+    <string name="main_list_item_customise_title">Customise</string>
+    <string name="main_list_item_customise_subtitle">Customise StepView</string>
+
     <string name="dummy_text">Performance profilers
 Android Studio provides performance profilers so you can more easily track your app’s memory and CPU usage, find deallocated objects, locate memory leaks, optimize graphics performance, and analyze network requests. With your app running on a device or emulator, open the Android Profiler tab.
 
@@ -36,4 +42,6 @@ Code inspections
 Whenever you compile your program, Android Studio automatically runs configured Lint and other IDE inspections to help you easily identify and correct problems with the structural quality of your code.
 
 The Lint tool checks your Android project source files for potential bugs and optimization improvements for correctness, security, performance, usability, accessibility, and internationalization.</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

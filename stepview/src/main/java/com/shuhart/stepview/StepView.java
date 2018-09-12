@@ -858,6 +858,7 @@ public class StepView extends View {
             StepView.this.animationType = animationType;
             StepView.this.selectedTextColor = selectedTextColor;
             StepView.this.selectedCircleRadius = selectedCircleRadius;
+            StepView.this.selectedCircleColor = selectedCircleColor;
             StepView.this.selectedTextColor = selectedTextColor;
             StepView.this.doneCircleColor = doneCircleColor;
             StepView.this.doneCircleRadius = doneCircleRadius;
