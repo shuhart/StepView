@@ -87,6 +87,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                     title = titleTextView.getContext().getString(R.string.main_list_item_customise_title);
                     subtitle = subtitleTextView.getContext().getString(R.string.main_list_item_customise_subtitle);
                     break;
+                case RTL:
+                    title = titleTextView.getContext().getString(R.string.main_list_item_rtl_title);
+                    subtitle = subtitleTextView.getContext().getString(R.string.main_list_item_rtl_subtitle);
+                    break;
             }
             Assert.assertNotNull(title);
             Assert.assertNotNull(subtitle);
@@ -111,6 +115,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         SIMPLE,
         RECYCLER_VIEW,
         SCROLL_VIEW,
-        CUSTOMISE
+        CUSTOMISE,
+        RTL
     }
 }

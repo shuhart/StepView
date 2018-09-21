@@ -13,6 +13,8 @@
     <string name="main_list_item_scrollview_subtitle">StepView inside ScrollView</string>
     <string name="main_list_item_customise_title">Customise</string>
     <string name="main_list_item_customise_subtitle">Customise StepView</string>
+    <string name="main_list_item_rtl_title">RTL</string>
+    <string name="main_list_item_rtl_subtitle">An example with Arabic language (You need to Turn on the any RTL locale to see full support of RTL)</string>
 
     <string name="dummy_text">Performance profilers
 Android Studio provides performance profilers so you can more easily track your app’s memory and CPU usage, find deallocated objects, locate memory leaks, optimize graphics performance, and analyze network requests. With your app running on a device or emulator, open the Android Profiler tab.

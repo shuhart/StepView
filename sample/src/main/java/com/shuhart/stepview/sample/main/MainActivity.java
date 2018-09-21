@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.shuhart.stepview.sample.R;
 import com.shuhart.stepview.sample.examples.customise.CustomiseActivity;
 import com.shuhart.stepview.sample.examples.recyclerview.RecyclerViewExampleActivity;
+import com.shuhart.stepview.sample.examples.rtl.RTLActivity;
 import com.shuhart.stepview.sample.examples.scrollview.ScrollViewExampleActivity;
 import com.shuhart.stepview.sample.examples.simple.SimpleActivity;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
             add(MainAdapter.Item.RECYCLER_VIEW);
             add(MainAdapter.Item.SCROLL_VIEW);
             add(MainAdapter.Item.CUSTOMISE);
+            add(MainAdapter.Item.RTL);
         }};
         adapter.listener = new MainAdapter.ItemClickListener() {
             @Override
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case CUSTOMISE:
                         startActivity(new Intent(MainActivity.this, CustomiseActivity.class));
+                        break;
+                    case RTL:
+                        startActivity(new Intent(MainActivity.this, RTLActivity.class));
                         break;
                 }
             }

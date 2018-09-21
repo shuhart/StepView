@@ -2,6 +2,7 @@ package com.shuhart.stepview;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,15 +11,18 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Dimension;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.LayoutDirection;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -423,19 +427,27 @@ public class StepView extends View {
         int max = 0;
         for (int i = 0; i < steps.size(); i++) {
             String text = steps.get(i);
+            Layout.Alignment alignment =
+                    isRtl() ? Layout.Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL;
             textLayouts[i] = new StaticLayout(
                     text,
                     textPaint,
                     getMeasuredWidth() / steps.size(),
-                    Layout.Alignment.ALIGN_NORMAL,
+                    alignment,
                     1,
                     0,
                     true
             );
+
             int height = textLayouts[i].getHeight();
             max = Math.max(height, max);
         }
         return max;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private boolean isRtl() {
+        return ViewCompat.getLayoutDirection(this) == View.LAYOUT_DIRECTION_RTL;
     }
 
     private void measureAttributes() {
@@ -486,8 +498,7 @@ public class StepView extends View {
     private int[] measureSteps() {
         int[] result = new int[steps.size()];
         for (int i = 0; i < steps.size(); i++) {
-            // TODO use StaticLayout?
-            result[i] = (int) paint.measureText(steps.get(i)) + /* correct possible conversion error */ 1;
+            result[i] = (int) StaticLayout.getDesiredWidth(steps.get(i), textPaint);
         }
         return result;
     }
@@ -673,6 +684,7 @@ public class StepView extends View {
         canvas.save();
         canvas.translate(circlesX[step], y);
         layout.draw(canvas);
+//        canvas.drawText(text, circlesX[step], y, textPaint);
         canvas.restore();
     }
 

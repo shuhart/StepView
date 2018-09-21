@@ -7,7 +7,7 @@ Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `implementation 'com.shuhart.stepview:stepview:1.3.3'` to your dependencies.
+2. Add `implementation 'com.shuhart.stepview:stepview:1.4.0'` to your dependencies.
 3. Add `StepView` into your layouts or view hierarchy.
 
 Supported animations:
