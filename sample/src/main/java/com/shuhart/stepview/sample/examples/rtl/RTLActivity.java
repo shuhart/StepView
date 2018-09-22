@@ -50,8 +50,8 @@ public class RTLActivity extends AppCompatActivity {
         });
         List<String> steps = new ArrayList<String>(){{
             add("الأول");
-            add("الثاني");
-            add("ثالث خطوة طويلة بشكل ملموس");
+            add("الثاني ، نص طويل نوعا ما");
+            add("الثالث");
             add("الرابع");
             add("الخامس");
         }};

@@ -22,7 +22,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.LayoutDirection;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -489,9 +488,9 @@ public class StepView extends View {
 
     private int[] getCirclePositions() {
         if (displayMode == DISPLAY_MODE_WITH_TEXT) {
-            return getCirclePositionsWithText(measureSteps());
+            return getCirclePositions(measureSteps());
         } else {
-            return getCirclePositionsWithoutText();
+            return getCirclePositions(null);
         }
     }
 
@@ -503,42 +502,79 @@ public class StepView extends View {
         return result;
     }
 
-    private int[] getCirclePositionsWithText(int[] textWidth) {
-        int[] result = new int[textWidth.length];
+    private int[] getCirclePositions(@Nullable int[] textWidth) {
+        int stepsCount = getStepCount();
+        int[] result = new int[stepsCount];
+
         if (result.length == 0) {
             return result;
         }
-        result[0] = getPaddingLeft() + Math.max(textWidth[0] / 2, selectedCircleRadius);
+
+        result[0] = getStartCirclePositionRTLAware(textWidth);
+
         if (result.length == 1) {
             return result;
         }
-        result[textWidth.length - 1] = getMeasuredWidth() - getPaddingRight() -
-                Math.max(textWidth[textWidth.length - 1] / 2, selectedCircleRadius);
+
+        result[stepsCount - 1] = getEndCirclePositionRTLAware(textWidth);
+
         if (result.length < 3) {
             return result;
         }
-        float spaceLeft = result[textWidth.length - 1] - result[0];
-        int margin = (int) (spaceLeft / (textWidth.length - 1));
-        for (int i = 1; i < textWidth.length - 1; i++) {
-            result[i] = result[i - 1] + margin;
+
+        float spaceLeft = isRtl() ? result[0] - result[stepsCount - 1] : result[stepsCount - 1] - result[0];
+        int margin = (int) (spaceLeft / (stepsCount - 1));
+
+        if (isRtl()) {
+            for (int i = 1; i < stepsCount - 1; i++) {
+                result[i] = result[i - 1] - margin;
+            }
+        } else {
+            for (int i = 1; i < stepsCount - 1; i++) {
+                result[i] = result[i - 1] + margin;
+            }
+        }
+
+        return result;
+    }
+
+    private int getStartCirclePositionRTLAware(int[] textWidth) {
+        int startCirclePosition;
+        if (isRtl()) {
+            startCirclePosition = getEndCirclePosition(textWidth);
+        } else {
+            startCirclePosition = getStartCirclePosition(textWidth);
+        }
+        return startCirclePosition;
+    }
+
+    private int getEndCirclePositionRTLAware(int[] textWidth) {
+        int endCirclePosition;
+        if (isRtl()) {
+            endCirclePosition = getStartCirclePosition(textWidth);
+        } else {
+            endCirclePosition = getEndCirclePosition(textWidth);
+        }
+        return endCirclePosition;
+    }
+
+    private int getStartCirclePosition(int[] textWidth) {
+        int result;
+        if (displayMode == DISPLAY_MODE_WITH_TEXT) {
+            result = getPaddingLeft() + Math.max(textWidth[0] / 2, selectedCircleRadius);
+        } else {
+            result = getPaddingLeft() + selectedCircleRadius;
         }
         return result;
     }
 
-    private int[] getCirclePositionsWithoutText() {
-        int[] result = new int[getStepCount()];
-        if (result.length == 0) {
-            return result;
-        }
-        result[0] = getPaddingLeft() + selectedCircleRadius;
-        if (result.length == 1) {
-            return result;
-        }
-        result[result.length - 1] = getMeasuredWidth() - getPaddingRight() - selectedCircleRadius;
-        float spaceLeft = result[result.length - 1] - result[0];
-        int margin = (int) (spaceLeft / (result.length - 1));
-        for (int i = 1; i < result.length - 1; i++) {
-            result[i] = result[i - 1] + margin;
+    private int getEndCirclePosition(int[] textWidth) {
+        int result;
+        if (displayMode == DISPLAY_MODE_WITH_TEXT) {
+            result = getMeasuredWidth() - getPaddingRight() -
+                    Math.max(textWidth[textWidth.length - 1] / 2, selectedCircleRadius);
+        } else {
+            result = getMeasuredWidth() - getPaddingRight() - selectedCircleRadius;
         }
         return result;
     }
@@ -549,8 +585,13 @@ public class StepView extends View {
         int padding = stepPadding + selectedCircleRadius;
 
         for (int i = 1; i < getStepCount(); i++) {
-            startLinesX[i - 1] = circlesX[i - 1] + padding;
-            endLinesX[i - 1] = circlesX[i] - padding;
+            if (isRtl()) {
+                startLinesX[i - 1] = circlesX[i - 1] - padding;
+                endLinesX[i - 1] = circlesX[i] + padding;
+            } else {
+                startLinesX[i - 1] = circlesX[i - 1] + padding;
+                endLinesX[i - 1] = circlesX[i] - padding;
+            }
         }
     }
 
@@ -684,7 +725,6 @@ public class StepView extends View {
         canvas.save();
         canvas.translate(circlesX[step], y);
         layout.draw(canvas);
-//        canvas.drawText(text, circlesX[step], y, textPaint);
         canvas.restore();
     }
 

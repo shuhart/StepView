@@ -19,7 +19,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:sv_animationType="All"
         app:sv_stepPadding="12dp"
-        app:sv_typeface="@font/iran_sans_mobile" />
+        app:sv_typeface="@font/iran_sans_mobile"
+        android:layoutDirection="rtl"/>
 
     <Button
         android:id="@+id/next"
