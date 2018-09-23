@@ -52,6 +52,7 @@ public class SimpleActivity extends AppCompatActivity {
         for (int i = 0; i < 5; i++) {
             steps.add("Step " + (i + 1));
         }
+        steps.set(steps.size() - 1, steps.get(steps.size() - 1) + " last one");
         stepView.setSteps(steps);
 
         final StepView stepView2 = findViewById(R.id.step_view_2);

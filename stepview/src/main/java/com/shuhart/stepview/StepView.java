@@ -167,8 +167,8 @@ public class StepView extends View {
         stepsNumber = ta.getInteger(R.styleable.StepView_sv_stepsNumber, 0);
         CharSequence[] descriptions = ta.getTextArray(R.styleable.StepView_sv_steps);
         if (descriptions != null) {
-            for (CharSequence item : descriptions) {
-                steps.add(item.toString());
+            for (CharSequence description : descriptions) {
+                steps.add(description.toString());
             }
             displayMode = DISPLAY_MODE_WITH_TEXT;
         } else {
@@ -243,9 +243,7 @@ public class StepView extends View {
         stepsNumber = 0;
         displayMode = DISPLAY_MODE_WITH_TEXT;
         this.steps.clear();
-        if (steps != null) {
-            this.steps.addAll(steps);
-        }
+        this.steps.addAll(steps);
         requestLayout();
         go(START_STEP, false);
     }
@@ -364,11 +362,15 @@ public class StepView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = measureWidth(widthMeasureSpec);
         if (getStepCount() == 0) {
-            setMeasuredDimension(0, 0);
+            setMeasuredDimension(width, 0);
             return;
         }
-        int width = measureWidth(widthMeasureSpec);
+        if (width == 0) {
+            setMeasuredDimension(width, 0);
+            return;
+        }
         measureConstraints(width);
         int height = measureHeight(heightMeasureSpec);
         setMeasuredDimension(width, height);
@@ -388,8 +390,6 @@ public class StepView extends View {
     }
 
     private int measureHeight(int heightMeasureSpec) {
-        if (getMeasuredWidth() == 0) return 0;
-
         int specSize = MeasureSpec.getSize(heightMeasureSpec);
         int specMode = MeasureSpec.getMode(heightMeasureSpec);
         int desiredSize = getPaddingTop()
@@ -437,7 +437,6 @@ public class StepView extends View {
                     0,
                     true
             );
-
             int height = textLayouts[i].getHeight();
             max = Math.max(height, max);
         }
@@ -487,22 +486,6 @@ public class StepView extends View {
     }
 
     private int[] getCirclePositions() {
-        if (displayMode == DISPLAY_MODE_WITH_TEXT) {
-            return getCirclePositions(measureSteps());
-        } else {
-            return getCirclePositions(null);
-        }
-    }
-
-    private int[] measureSteps() {
-        int[] result = new int[steps.size()];
-        for (int i = 0; i < steps.size(); i++) {
-            result[i] = (int) StaticLayout.getDesiredWidth(steps.get(i), textPaint);
-        }
-        return result;
-    }
-
-    private int[] getCirclePositions(@Nullable int[] textWidth) {
         int stepsCount = getStepCount();
         int[] result = new int[stepsCount];
 
@@ -510,13 +493,13 @@ public class StepView extends View {
             return result;
         }
 
-        result[0] = getStartCirclePositionRTLAware(textWidth);
+        result[0] = getStartCirclePosition();
 
         if (result.length == 1) {
             return result;
         }
 
-        result[stepsCount - 1] = getEndCirclePositionRTLAware(textWidth);
+        result[stepsCount - 1] = getEndCirclePosition();
 
         if (result.length < 3) {
             return result;
@@ -538,45 +521,56 @@ public class StepView extends View {
         return result;
     }
 
-    private int getStartCirclePositionRTLAware(int[] textWidth) {
-        int startCirclePosition;
-        if (isRtl()) {
-            startCirclePosition = getEndCirclePosition(textWidth);
-        } else {
-            startCirclePosition = getStartCirclePosition(textWidth);
-        }
-        return startCirclePosition;
-    }
-
-    private int getEndCirclePositionRTLAware(int[] textWidth) {
-        int endCirclePosition;
-        if (isRtl()) {
-            endCirclePosition = getStartCirclePosition(textWidth);
-        } else {
-            endCirclePosition = getEndCirclePosition(textWidth);
-        }
-        return endCirclePosition;
-    }
-
-    private int getStartCirclePosition(int[] textWidth) {
+    private int getStartCirclePosition() {
         int result;
         if (displayMode == DISPLAY_MODE_WITH_TEXT) {
-            result = getPaddingLeft() + Math.max(textWidth[0] / 2, selectedCircleRadius);
+            if (isRtl()) {
+                result = getMeasuredWidth() - getPaddingRight() -
+                        Math.max(getMaxLineWidth(textLayouts[0]) / 2, selectedCircleRadius);
+            } else {
+                result = getPaddingLeft() + Math.max(getMaxLineWidth(textLayouts[0]) / 2, selectedCircleRadius);
+            }
         } else {
-            result = getPaddingLeft() + selectedCircleRadius;
+            if (isRtl()) {
+                result = getMeasuredWidth() - getPaddingRight() - selectedCircleRadius;
+            } else {
+                result = getPaddingLeft() + selectedCircleRadius;
+            }
         }
         return result;
     }
 
-    private int getEndCirclePosition(int[] textWidth) {
+    private int getMaxLineWidth(StaticLayout layout) {
+        int lineCount = layout.getLineCount();
+        int max = 0;
+        for (int i = 0; i < lineCount; i++) {
+            max = (int) Math.max(layout.getLineWidth(i), max);
+        }
+        return max;
+    }
+
+    private int getEndCirclePosition() {
         int result;
         if (displayMode == DISPLAY_MODE_WITH_TEXT) {
-            result = getMeasuredWidth() - getPaddingRight() -
-                    Math.max(textWidth[textWidth.length - 1] / 2, selectedCircleRadius);
+            if (isRtl()) {
+                result = getPaddingLeft() +
+                        Math.max(getMaxLineWidth(last(textLayouts)) / 2, selectedCircleRadius);
+            } else {
+                result = getMeasuredWidth() - getPaddingRight() -
+                        Math.max(getMaxLineWidth(last(textLayouts)) / 2, selectedCircleRadius);
+            }
         } else {
-            result = getMeasuredWidth() - getPaddingRight() - selectedCircleRadius;
+            if (isRtl()) {
+                result = getPaddingLeft() + selectedCircleRadius;
+            } else {
+                result = getMeasuredWidth() - getPaddingRight() - selectedCircleRadius;
+            }
         }
         return result;
+    }
+
+    private <T> T last(T[] array) {
+        return array[array.length - 1];
     }
 
     private void measureLines() {
