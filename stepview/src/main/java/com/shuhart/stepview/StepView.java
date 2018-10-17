@@ -181,13 +181,17 @@ public class StepView extends View {
         int fontId = ta.getResourceId(R.styleable.StepView_sv_typeface, 0);
         if (fontId != 0) {
             Typeface typeface = ResourcesCompat.getFont(context, fontId);
-            if (typeface != null) {
-                textPaint.setTypeface(typeface);
-                paint.setTypeface(typeface);
-            }
+            setTypeface(typeface);
         }
         textPaint.setTextSize(textSize);
         ta.recycle();
+    }
+
+    private void setTypeface(Typeface typeface) {
+        if (typeface != null) {
+            textPaint.setTypeface(typeface);
+            paint.setTypeface(typeface);
+        }
     }
 
     private void drawEditMode() {
@@ -920,7 +924,7 @@ public class StepView extends View {
             StepView.this.stepNumberTextSize = stepNumberTextSize;
             StepView.this.doneStepMarkColor = doneStepMarkColor;
             StepView.this.animationDuration = animationDuration;
-            paint.setTypeface(typeface);
+            setTypeface(typeface);
             if (steps != null && !StepView.this.steps.equals(steps)) {
                 StepView.this.setSteps(steps);
             } else if (stepsNumber != 0 && stepsNumber != StepView.this.stepsNumber) {
