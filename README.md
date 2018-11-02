@@ -98,6 +98,13 @@ or instantiate and setup it in runtime with handy state builder:
             .commit();
 ```
 
+Change a step:
+```java
+    // Passing 'true' triggers an animation if enabled.
+    // Animation would run if a difference between current and next is 1.
+    stepView.go(step, true);
+```
+
 If you want to mark last step with a done mark:
 ```java
 	stepView.done(true);
