@@ -12,6 +12,7 @@
         <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -21,6 +22,7 @@
         <activity android:name=".examples.simple.SimpleActivity" />
         <activity android:name=".examples.customise.CustomiseActivity" />
         <activity android:name=".examples.rtl.RTLActivity" />
+        <activity android:name=".examples.delayed.DelayedInitActivity" />
     </application>
 
 </manifest>

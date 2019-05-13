@@ -3,6 +3,7 @@
     <string name="btn_next">Next</string>
     <string name="btn_back">Back</string>
     <string name="btn_apply">Apply</string>
+    <string name="btn_init">Init steps</string>
     <string name="hint_selected_circle_color">Selected circle color</string>
     <string name="hint_selected_text_color">Selected text color</string>
     <string name="main_list_item_simple_title">Simple</string>
@@ -15,6 +16,8 @@
     <string name="main_list_item_customise_subtitle">Customise StepView</string>
     <string name="main_list_item_rtl_title">RTL</string>
     <string name="main_list_item_rtl_subtitle">An example with Arabic language \n(You need to force RTL or select RTL locale in order to see the effect)</string>
+    <string name="main_list_item_delayed_init_title">Delayed init</string>
+    <string name="main_list_item_delayed_init_subtitle">An example to test a behavior after a view is laid out.</string>
 
     <string name="dummy_text">Performance profilers
 Android Studio provides performance profilers so you can more easily track your app’s memory and CPU usage, find deallocated objects, locate memory leaks, optimize graphics performance, and analyze network requests. With your app running on a device or emulator, open the Android Profiler tab.
@@ -46,4 +49,6 @@ Whenever you compile your program, Android Studio automatically runs configured 
 The Lint tool checks your Android project source files for potential bugs and optimization improvements for correctness, security, performance, usability, accessibility, and internationalization.</string>
     <string name="confirm">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="next_circle_enabled">Enable next circle</string>
+    <string name="hint_next_circle_color">Next circle color</string>
 </resources>

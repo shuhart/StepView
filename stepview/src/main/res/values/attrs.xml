@@ -29,5 +29,7 @@
         <attr name="sv_stepsNumber" format="integer" />
         <attr name="sv_steps" format="reference" />
         <attr name="sv_typeface" format="reference" />
+        <attr name="sv_nextStepCircleEnabled" format="boolean" />
+        <attr name="sv_nextStepCircleColor" format="color" />
     </declare-styleable>
 </resources>
