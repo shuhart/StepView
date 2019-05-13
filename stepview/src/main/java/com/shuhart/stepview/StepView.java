@@ -17,6 +17,7 @@ import android.support.annotation.Dimension;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.ViewCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -637,8 +638,19 @@ public class StepView extends View {
             paint.setColor(selectedCircleColor);
             int radius;
             if (state == ANIMATE_STEP_TRANSITION && (animationType == ANIMATION_CIRCLE || animationType == ANIMATION_ALL)
-                    && nextAnimatedStep < currentStep && (!nextStepCircleEnabled || nextStepCircleColor == 0)) {
-                radius = (int) (selectedCircleRadius - selectedCircleRadius * animatedFraction);
+                    && nextAnimatedStep < currentStep) {
+                if (!nextStepCircleEnabled || nextStepCircleColor == 0) {
+                    radius = (int) (selectedCircleRadius - selectedCircleRadius * animatedFraction);
+                } else {
+                    radius = selectedCircleRadius;
+                }
+                if (nextStepCircleEnabled && nextStepCircleColor != 0) {
+                    paint.setColor(ColorUtils.blendARGB(
+                            selectedCircleColor,
+                            nextStepCircleColor,
+                            animatedFraction)
+                    );
+                }
             } else {
                 radius = selectedCircleRadius;
             }
@@ -671,7 +683,11 @@ public class StepView extends View {
             if (state == ANIMATE_STEP_TRANSITION && step == nextAnimatedStep && nextAnimatedStep > currentStep) {
                 if (animationType == ANIMATION_CIRCLE || animationType == ANIMATION_ALL) {
                     if (nextStepCircleEnabled && nextStepCircleColor != 0) {
-                        paint.setColor(nextStepCircleColor);
+                        paint.setColor(ColorUtils.blendARGB(
+                                nextStepCircleColor,
+                                selectedCircleColor,
+                                animatedFraction)
+                        );
                         canvas.drawCircle(circleCenterX, circleCenterY, selectedCircleRadius, paint);
                     } else {
                         int animatedRadius = (int) (selectedCircleRadius * animatedFraction);
