@@ -16,6 +16,7 @@
         android:padding="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:sv_animationType="All"
         app:sv_stepPadding="12dp"
         app:sv_typeface="@font/iran_sans_mobile" />

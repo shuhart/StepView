@@ -12,8 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.shuhart.stepview.StepView;
@@ -67,6 +69,13 @@ public class CustomiseActivity extends AppCompatActivity {
                 stepView.go(currentStep, true);
             }
         });
+        Switch sw = findViewById(R.id.next_circle_switch);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                stepView.getState().nextStepCircleEnabled(isChecked).commit();
+            }
+        });
         List<String> steps = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             steps.add("Step " + (i + 1));
@@ -77,6 +86,7 @@ public class CustomiseActivity extends AppCompatActivity {
     private void setupCustomisation() {
         setupSelectCircleColorCustomisation();
         setupSelectTextColorCustomisation();
+        setupNextCircleColorCustomisation();
     }
 
     private void setupSelectCircleColorCustomisation() {
@@ -167,6 +177,53 @@ public class CustomiseActivity extends AppCompatActivity {
                     @Override
                     public void onColorPicked(String hex) {
                         selectedTextColorEditText.setText(hex);
+                    }
+                });
+            }
+        });
+    }
+
+    private void setupNextCircleColorCustomisation() {
+        final EditText hext = findViewById(R.id.next_circle_color_hex);
+        final ImageView sample = findViewById(R.id.next_circle_color_sample);
+
+        hext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String candidateColorHex = s.toString();
+                if (!candidateColorHex.contains("#")) {
+                    candidateColorHex = "#" + candidateColorHex;
+                }
+                try {
+                    int color = Color.parseColor(candidateColorHex);
+                    sample.setImageDrawable(new ColorDrawable(color));
+                    stepView.getState().nextStepCircleColor(color).commit();
+                } catch (IllegalArgumentException ignore) {
+                }
+            }
+        });
+
+        int color = Color.GRAY;
+        String hex = Integer.toHexString(color).toUpperCase().substring(2);
+        hext.setText(hex);
+
+        sample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showColorPickerDialog(new ColorPickListener() {
+                    @Override
+                    public void onColorPicked(String hex) {
+                        hext.setText(hex);
                     }
                 });
             }
