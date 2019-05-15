@@ -7,7 +7,7 @@ Usage
 -----
 
 1. Add jcenter() to repositories block in your gradle file.
-2. Add `implementation 'com.shuhart.stepview:stepview:1.4.0'` to your dependencies.
+2. Add `implementation 'com.shuhart.stepview:stepview:1.5.0'` to your dependencies.
 3. Add `StepView` into your layouts or view hierarchy.
 
 Supported animations:
@@ -128,6 +128,26 @@ See the sample for additional details.
 
 If you want a custom typeface you should add font files to the resource folder "font" and reference any in xml layout.
 Alternatively you can specify typeface using the state builder in your code. Look into the sample for additional details on that.
+
+You can enable view to draw remained step circles with a specified color.
+In xml:
+```xml
+<com.shuhart.stepview.StepView
+	android:id="@+id/step_view"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="16dp"
+	app:sv_nextStepCircleEnabled="true"
+	app:sv_nextStepCircleColor="@color/gray"/>
+```
+
+In java:
+```java
+    stepView.getState()
+        .nextStepCircleEnabled(isChecked)
+        .nextStepCircleColor(Color.GRAY)
+        .commit();
+```
 
 License
 =======

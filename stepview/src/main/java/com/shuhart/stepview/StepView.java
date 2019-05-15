@@ -629,6 +629,8 @@ public class StepView extends View {
     }
 
     private void drawStep(Canvas canvas, int step, int circleCenterX, int circleCenterY) {
+        // todo: fix alpha for text when going back/forward
+        // todo: don't scale up/down numbers if circles are not scaled
         final String text = displayMode == DISPLAY_MODE_WITH_TEXT ? steps.get(step) : "";
         final boolean isSelected = step == currentStep;
         final boolean isDone = done ? step <= currentStep : step < currentStep;
