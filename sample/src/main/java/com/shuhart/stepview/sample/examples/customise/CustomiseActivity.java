@@ -3,6 +3,7 @@ package com.shuhart.stepview.sample.examples.customise;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,6 +41,7 @@ public class CustomiseActivity extends AppCompatActivity {
     }
 
     private void setupStepView() {
+        stepView.getState().typeface(Typeface.createFromAsset(getAssets(), "font/LemonSansRegular.otf")).commit();
         stepView.setOnStepClickListener(new StepView.OnStepClickListener() {
             @Override
             public void onStepClick(int step) {
