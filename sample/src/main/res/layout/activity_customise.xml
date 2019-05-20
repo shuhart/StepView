@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:sv_animationType="All"
             app:sv_stepPadding="12dp"
-            app:sv_typeface="@font/iran_sans_mobile" />
+            app:sv_typeface="@font/iran_sans_mobile"/>
 
         <Button
             android:id="@+id/next"

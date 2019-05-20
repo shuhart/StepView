@@ -41,7 +41,6 @@ public class CustomiseActivity extends AppCompatActivity {
     }
 
     private void setupStepView() {
-        stepView.getState().typeface(Typeface.createFromAsset(getAssets(), "font/LemonSansRegular.otf")).commit();
         stepView.setOnStepClickListener(new StepView.OnStepClickListener() {
             @Override
             public void onStepClick(int step) {
