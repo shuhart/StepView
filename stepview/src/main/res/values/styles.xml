@@ -17,7 +17,7 @@
         <item name="sv_stepPadding">12dp</item>
         <item name="sv_textPadding">12dp</item>
         <item name="sv_stepLineWidth">0.5dp</item>
-        <item name="sv_animationDuration">2000</item>
+        <item name="sv_animationDuration">200</item>
         <item name="sv_textSize">14sp</item>
         <item name="sv_animationType">Line</item>
     </style>

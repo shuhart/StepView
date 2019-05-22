@@ -18,6 +18,7 @@ Name| Preview
 `ANIMATION_CIRCLE`| ![animation_circle](/images/animation_circle.gif)
 `ANIMATION_ALL`| ![animation_all](/images/animation_all.gif)
 `ANIMATION_NONE`| ![animation_none](/images/animation_none.gif)
+`ANIMATION_ALL and all circles`| ![animation_none](/images/animation_circles.gif)
 
 In ANIMATION_CIRCLE and ANIMATION_NONE examples the line color remains the same. You can achieve this by specifying:
 ``` app:doneStepLineColor="@color/stepview_line_next" ```
