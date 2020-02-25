@@ -37,15 +37,15 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -58,8 +58,8 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:$supportVersion"
-    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 }
 
 group = publishedGroupId

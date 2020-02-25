@@ -16,9 +16,9 @@
         <attr name="sv_stepPadding" format="dimension" />
         <attr name="sv_textPadding" format="dimension" />
         <attr name="sv_stepLineWidth" format="dimension" />
-        <attr name="sv_textSize" />
-        <attr name="sv_background" />
-        <attr name="sv_animationDuration" />
+        <attr name="sv_textSize" format="dimension" />
+        <attr name="sv_background" format="color" />
+        <attr name="sv_animationDuration" format="integer" />
         <attr name="sv_stepViewStyle" format="reference" />
         <attr name="sv_animationType" format="enum">
             <enum name="Line" value="0" />
