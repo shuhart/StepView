@@ -1,14 +1,13 @@
 package com.shuhart.stepview.sample.examples.rtl;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import com.shuhart.stepview.StepView;
 import com.shuhart.stepview.sample.R;
-import com.shuhart.stepview.sample.examples.simple.SimpleActivity;
 
 import java.util.ArrayList;
 import java.util.List;
