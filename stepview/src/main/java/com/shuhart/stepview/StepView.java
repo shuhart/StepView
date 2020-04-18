@@ -271,7 +271,7 @@ public class StepView extends View {
     }
 
     public void go(int step, boolean animate) {
-        if (step >= START_STEP && step < getStepCount()) {
+        if (step >= START_STEP && step <= getStepCount()) {
             if (animate && animationType != ANIMATION_NONE && startLinesX != null) {
                 if (Math.abs(step - currentStep) > 1) {
                     endAnimation();
