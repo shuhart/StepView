@@ -44,6 +44,15 @@ public class StepView extends View {
         void onStepClick(int step);
     }
 
+    public interface OnStepChangeListener {
+        /**
+         * Index of the first step is 0.
+         *
+         * @param newStep index of the new step
+         */
+        void onStepChangeTo(int newStep);
+    }
+
     public static final int ANIMATION_LINE = 0;
     public static final int ANIMATION_CIRCLE = 1;
     public static final int ANIMATION_ALL = 2;
@@ -63,6 +72,7 @@ public class StepView extends View {
     }
 
     private OnStepClickListener onStepClickListener;
+    private OnStepChangeListener onStepChangeListener;
     private static final int ANIMATE_STEP_TRANSITION = 0;
     private static final int IDLE = 1;
 
@@ -287,7 +297,15 @@ public class StepView extends View {
                 currentStep = step;
                 invalidate();
             }
+            if (onStepChangeListener != null) {
+                onStepChangeListener.onStepChangeTo(step);
+            }
         }
+    }
+
+    public void changeText(int step, CharSequence newText) {
+        this.steps.set(step, newText.toString());
+        requestLayout();
     }
 
     public void done(boolean isDone) {
