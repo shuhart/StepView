@@ -27,7 +27,7 @@ Usage:
 
 Specify steps with xml attribute:
 ```xml
-	app:steps="@array/steps"
+	app:sv_steps="@array/steps"
 ```
 ```java
 	stepView.setSteps(List<String> steps);
