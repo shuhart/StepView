@@ -76,7 +76,7 @@ publishing {
                     developer {
                         id = 'schuhart'
                         name = 'Bogdan Kornev'
-                        email = 'kornev.b@gmail.com'
+                        email = '5305278+shuhart@users.noreply.github.com'
                     }
                     // Add all other devs here...
                 }
