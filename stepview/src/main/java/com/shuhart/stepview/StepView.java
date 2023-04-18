@@ -741,14 +741,14 @@ public class StepView extends View {
                     canvas.drawCircle(circleCenterX, circleCenterY, selectedCircleRadius, paint);
                 }
                 if(strokeEnabled && strokeColor != 0 && strokeWidth != 0){
-                    Paint tempPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                    tempPaint.setTextAlign(Paint.Align.CENTER);;
-                    tempPaint.setColor(strokeColor);
-                    tempPaint.setStrokeWidth(strokeWidth);
-                    tempPaint.setStyle(Paint.Style.STROKE);
-                    tempPaint.setAntiAlias(true);
-                    tempPaint.setDither(true);
-                    canvas.drawCircle(circleCenterX, circleCenterY, selectedCircleRadius, tempPaint);
+                    Paint strokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    strokePaint.setTextAlign(Paint.Align.CENTER);;
+                    strokePaint.setColor(strokeColor);
+                    strokePaint.setStrokeWidth(strokeWidth);
+                    strokePaint.setStyle(Paint.Style.STROKE);
+                    strokePaint.setAntiAlias(true);
+                    strokePaint.setDither(true);
+                    canvas.drawCircle(circleCenterX, circleCenterY, selectedCircleRadius, strokePaint);
                 }
                 paint.setColor(nextTextColor);
 
