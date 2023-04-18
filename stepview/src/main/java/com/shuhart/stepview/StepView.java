@@ -114,6 +114,14 @@ public class StepView extends View {
     @ColorInt
     private int nextStepCircleColor;
 
+    @Dimension
+    private int strokeWidth;
+
+    @ColorInt
+    private int strokeColor;
+
+    private boolean strokeEnabled = false;
+
     private Paint paint;
     private TextPaint textPaint;
     private ValueAnimator animator;
@@ -171,6 +179,9 @@ public class StepView extends View {
         stepsNumber = ta.getInteger(R.styleable.StepView_sv_stepsNumber, 0);
         nextStepCircleEnabled = ta.getBoolean(R.styleable.StepView_sv_nextStepCircleEnabled, false);
         nextStepCircleColor = ta.getColor(R.styleable.StepView_sv_nextStepCircleColor, 0);
+        strokeWidth = ta.getDimensionPixelSize(R.styleable.StepView_sv_strokeWidth, 0);
+        strokeColor = ta.getColor(R.styleable.StepView_sv_strokeColor, 0);
+        strokeEnabled = ta.getBoolean(R.styleable.StepView_sv_enableStroke, false);
         CharSequence[] descriptions = ta.getTextArray(R.styleable.StepView_sv_steps);
         if (descriptions != null) {
             for (CharSequence description : descriptions) {
@@ -455,7 +466,7 @@ public class StepView extends View {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private boolean isRtl() {
-        return ViewCompat.getLayoutDirection(this) == View.LAYOUT_DIRECTION_RTL;
+        return ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL;
     }
 
     private void measureAttributes() {
@@ -729,7 +740,16 @@ public class StepView extends View {
                     paint.setColor(nextStepCircleColor);
                     canvas.drawCircle(circleCenterX, circleCenterY, selectedCircleRadius, paint);
                 }
-
+                if(strokeEnabled && strokeColor != 0 && strokeWidth != 0){
+                    Paint strokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    strokePaint.setTextAlign(Paint.Align.CENTER);;
+                    strokePaint.setColor(strokeColor);
+                    strokePaint.setStrokeWidth(strokeWidth);
+                    strokePaint.setStyle(Paint.Style.STROKE);
+                    strokePaint.setAntiAlias(true);
+                    strokePaint.setDither(true);
+                    canvas.drawCircle(circleCenterX, circleCenterY, selectedCircleRadius, strokePaint);
+                }
                 paint.setColor(nextTextColor);
 
                 paint.setTextSize(stepNumberTextSize);

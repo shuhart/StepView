@@ -31,8 +31,11 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:sv_animationType="All"
-            app:sv_stepPadding="12dp"
+            app:sv_stepPadding="0dp"
             app:sv_typeface="@font/iran_sans_mobile"
+            app:sv_enableStroke="true"
+            app:sv_strokeWidth="1dp"
+            app:sv_strokeColor="#FFFFFF"
             app:sv_stepsNumber="5"/>
 
         <Button

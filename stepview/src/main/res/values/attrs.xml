@@ -31,5 +31,8 @@
         <attr name="sv_typeface" format="reference" />
         <attr name="sv_nextStepCircleEnabled" format="boolean" />
         <attr name="sv_nextStepCircleColor" format="color" />
+        <attr name="sv_strokeWidth" format="dimension" />
+        <attr name="sv_enableStroke" format="boolean" />
+        <attr name="sv_strokeColor" format="color"/>
     </declare-styleable>
 </resources>
